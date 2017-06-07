@@ -41,7 +41,7 @@ g.add( (has_point, RDF['type'], OWL['ObjectProperty']) )
 ################################################################ smap point ####
 
 SmapPoint = BDSMAP['SmapPoint']
-g.add( (entity, RDFS.subClassOf, Point) )
+g.add( (SmapPoint, RDFS.subClassOf, Point) )
 
 Archiver = BDSMAP['Archiver']
 g.add( (Archiver, RDF['type'], OWL['Class']) )

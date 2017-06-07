@@ -30,6 +30,10 @@ g.bind('bd', BD)
 BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
 g.bind('bdsmap', BDSMAP)
 
+# static data namespace
+BDS = Namespace('https://brickschema.org/schema/1.0.1/BrickDataStatic#')
+g.bind('bds', BDS)
+
 ##################################################################### point ####
 
 Point = BD['Point']
@@ -40,7 +44,7 @@ g.add( (has_point, RDF['type'], OWL['ObjectProperty']) )
 
 ################################################################ smap point ####
 
-SmapPoint = BDSMAP['SmapPoint']
+SmapPoint = BDSMAP['Point']
 g.add( (SmapPoint, RDFS.subClassOf, Point) )
 
 Archiver = BDSMAP['Archiver']
@@ -60,7 +64,11 @@ g.add( (uuid, RDF['type'], OWL['ObjectProperty']) )
 
 ############################################################## static point ####
 
+StaticPoint = BDS['Point']
+g.add( (SmapPoint, RDFS.subClassOf, Point) )
 
+value = BDS['value']
+g.add( (value, RDF['type'], OWL['ObjectProperty']) )
 
 ######################################################### modeling paradigm ####
 

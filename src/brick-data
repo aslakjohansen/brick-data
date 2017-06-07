@@ -26,7 +26,7 @@ g.bind('owl' , OWL)
 BD = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
 g.bind('bd', BD)
 
-# brick-data namespace
+# smap data namespace
 BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
 g.bind('bdsmap', BDSMAP)
 

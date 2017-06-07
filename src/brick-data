@@ -1,0 +1,74 @@
+#!/usr/bin/env python3.5
+
+from sys import argv
+from rdflib import Graph, Namespace, URIRef, Literal
+
+# guard: commandline arguments
+if len(argv) != 2:
+    print('Syntax: %s OUTPUT_FILENAME' % argv[0])
+    print('        %s brick-data.ttl' % argv[0])
+    exit(1)
+output_filename = argv[1]
+
+################################################################ namespaces ####
+
+g = Graph()
+
+# source namespaces
+RDF  = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+RDFS = Namespace('http://www.w3.org/2000/01/rdf-schema#')
+OWL  = Namespace('http://www.w3.org/2002/07/owl#')
+g.bind('rdf' , RDF)
+g.bind('rdfs', RDFS)
+g.bind('owl' , OWL)
+
+# brick-data namespace
+BD = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
+g.bind('bd', BD)
+
+# brick-data namespace
+BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
+g.bind('bdsmap', BDSMAP)
+
+##################################################################### point ####
+
+Point = BD['Point']
+g.add( (Point, RDF['type'], OWL['Class']) )
+
+has_point = BD['hasPoint']
+g.add( (has_point, RDF['type'], OWL['ObjectProperty']) )
+
+################################################################ smap point ####
+
+SmapPoint = BDSMAP['SmapPoint']
+g.add( (entity, RDFS.subClassOf, Point) )
+
+Archiver = BDSMAP['Archiver']
+g.add( (Archiver, RDF['type'], OWL['Class']) )
+
+archivedAt = BDSMAP['archivedAt']
+g.add( (archivedAt, RDF['type'], OWL['ObjectProperty']) )
+
+add_path = BDSMAP['add']
+g.add( (add_path, RDF['type'], OWL['ObjectProperty']) )
+
+query_path = BDSMAP['query']
+g.add( (query_path, RDF['type'], OWL['ObjectProperty']) )
+
+uuid = BDSMAP['uuid']
+g.add( (uuid, RDF['type'], OWL['ObjectProperty']) )
+
+############################################################## static point ####
+
+
+
+######################################################### modeling paradigm ####
+
+
+
+############################################################## store result ####
+
+# store result
+print('Number of relations: %u' % (len(g)))
+g.serialize(output_filename, 'turtle')
+

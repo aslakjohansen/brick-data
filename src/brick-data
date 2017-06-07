@@ -75,6 +75,12 @@ g.add( (value, RDF['type'], OWL['ObjectProperty']) )
 ModelParadigm = BD['Model_Paradigm']
 g.add( (ModelParadigm, RDF['type'], OWL['Class']) )
 
+Property = BD['Property']
+g.add( (Property, RDF['type'], OWL['Class']) )
+
+hasProperty = BD['hasProperty']
+g.add( (hasProperty, RDF['type'], OWL['ObjectProperty']) )
+
 ############################################################## store result ####
 
 # store result

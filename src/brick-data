@@ -37,7 +37,7 @@ g.bind('bds', BDS)
 ##################################################################### point ####
 
 Point = BD['Point']
-g.add( (Point, RDF['type'], OWL['Class']) )
+g.add( (Point, RDF['type'], OWL['Class']) ) # TODO: should this not be RDFS.subClassOf?
 
 has_point = BD['hasPoint']
 g.add( (has_point, RDF['type'], OWL['ObjectProperty']) )
@@ -72,7 +72,8 @@ g.add( (value, RDF['type'], OWL['ObjectProperty']) )
 
 ######################################################### modeling paradigm ####
 
-
+ModelParadigm = BD['Model_Paradigm']
+g.add( (ModelParadigm, RDF['type'], OWL['Class']) )
 
 ############################################################## store result ####
 

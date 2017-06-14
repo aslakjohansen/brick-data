@@ -2,6 +2,7 @@ TARGETS = \
 	results.json \
 
 
+
 all: ${TARGETS}
 
 clean:
@@ -11,6 +12,7 @@ clean:
 mrproper: clean
 	touch dummy~ queries/dummy~
 	rm        *~ queries/*~
+
 
 
 brick-data.ttl: brick-data

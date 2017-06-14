@@ -70,10 +70,10 @@ g.add( (StaticData, RDFS.subClassOf, Data) )
 value = BDS['value']
 g.add( (value, RDF['type'], OWL['ObjectProperty']) )
 
-######################################################### modeling paradigm ####
+######################################################### modeling approach ####
 
-ModelParadigm = BD['Model_Paradigm']
-g.add( (ModelParadigm, RDF['type'], OWL['Class']) )
+ModelApproach = BD['Model_Approach']
+g.add( (ModelApproach, RDF['type'], OWL['Class']) )
 
 Property = BD['Property']
 g.add( (Property, RDF['type'], OWL['Class']) )

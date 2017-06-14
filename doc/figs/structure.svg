@@ -2,6 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -18,6 +19,14 @@
    sodipodi:docname="structure.svg">
   <defs
      id="defs2">
+    <linearGradient
+       id="linearGradient2828"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop2826" />
+    </linearGradient>
     <marker
        inkscape:isstock="true"
        style="overflow:visible"
@@ -99,9 +108,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="429.5749"
-     inkscape:cy="417.49687"
+     inkscape:zoom="1.4"
+     inkscape:cx="246.97701"
+     inkscape:cy="400.36328"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -140,6 +149,18 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <path
+       style="fill:#0000ff;fill-opacity:0.12156863;fill-rule:evenodd;stroke:#00007f;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.24705882"
+       d="m -31,192 h 78 l 0,20 -78,0 z"
+       id="path1314"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#ff0000;fill-opacity:0.12156863;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.24705882"
+       d="m 86,177 h 82 l 0,30 H 86 Z"
+       id="path1314-1"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
     <g
        transform="translate(50,25.000005)"
        id="g2082-5-8-9">
@@ -1183,7 +1204,7 @@
          sodipodi:nodetypes="ccccc" />
     </g>
     <path
-       style="fill:#000000;fill-opacity:0.17479673;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.41056913"
+       style="fill:#000000;fill-opacity:0.17479673;fill-rule:evenodd;stroke:#000000;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.41056913;stroke-miterlimit:4;stroke-dasharray:0.79499996,0.79499996;stroke-dashoffset:0"
        d="m 56,198 h 25.999998 c 1.000003,0 2.000003,1 2.000002,2 v 24 c 10e-7,1 -0.999999,2 -2.000002,2 H 56 c -0.999999,0 -1.999999,-1 -1.999999,-2 v -24 c 0,-1 1,-2 1.999999,-2 z"
        id="path1039-5"
        inkscape:connector-curvature="0"
@@ -1410,7 +1431,7 @@
     </g>
     <g
        id="g1312"
-       transform="translate(-11,10)">
+       transform="translate(-8,10)">
       <g
          id="g1285">
         <text
@@ -1472,5 +1493,29 @@
              sodipodi:role="line">Literal</tspan></text>
       </g>
     </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:5.29166651px;font-family:cmr10;-inkscape-font-specification:'cmr10, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-208.59308"
+       y="-32"
+       id="text2873-1-2-3-5"
+       transform="matrix(0,-1,1,0.20603394,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan2871-5-01-11-5"
+         x="-208.59308"
+         y="-32"
+         style="font-size:2.82222223px;text-align:center;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke-width:0.26458332px">Properties</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:5.29166651px;font-family:cmr10;-inkscape-font-specification:'cmr10, Normal';text-align:end;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-161.48712"
+       y="85"
+       id="text2873-1-2-3-5-2"
+       transform="matrix(0,-1,1,0.20603394,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan2871-5-01-11-5-9"
+         x="-161.48712"
+         y="85"
+         style="font-size:2.82222223px;text-align:end;text-anchor:end;fill:#ff0000;fill-opacity:1;stroke-width:0.26458332px">Data Link</tspan></text>
   </g>
 </svg>

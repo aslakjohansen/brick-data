@@ -2,14 +2,27 @@
 
 import sys
 import rdflib
+from rdflib import Literal, Namespace
+
+################################################################### helpers ####
+
+def create_dummy_value ():
+    global counter
+    result = Literal('dummy_literal%d' % counter)
+    counter += 1
+    return result
+
+###################################################################### main ####
 
 # guard: commandline arguments
 if len(sys.argv) != 3:
     print('Syntax: %s INPUT_FILENAME OUTPUT_FILENAME' % sys.argv[0])
     print('        %s ../../GroundTruth/building_instances/gtc_brick.ttl gth.ttl' % sys.argv[0])
+    print('        %s ../../ou44-brick/src/sdu_ou44_brick.ttl ou44.ttl' % sys.argv[0])
     exit()
 ifilename = sys.argv[1]
 ofilename = sys.argv[2]
+counter = 1
 
 # load input
 g = rdflib.Graph()
@@ -18,6 +31,37 @@ initial_relation_count = len(g)
 
 # load extension
 g.parse('brick-data.ttl', format='turtle')
+BD     = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
+BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
+BDS    = Namespace('https://brickschema.org/schema/1.0.1/BrickDataStatic#')
+RDF    = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+DATA   = Namespace('http://mmmi.sdu.dk/1.0.1/buildings/ou44/data#')
+g.bind('rdf'  , RDF)
+g.bind('data', DATA)
+
+# create archiver
+archiver = DATA['archiver']
+g.add( (archiver, RDF.type      , BDSMAP['Archiver']) )
+g.add( (archiver, BDSMAP.add    , create_dummy_value()) )
+g.add( (archiver, BDSMAP.query  , create_dummy_value()) )
+g.add( (archiver, BDSMAP.version, create_dummy_value()) )
+
+# attach metering properties and streams
+q = '''
+SELECT ?meter
+WHERE {
+    ?meter rdf:type/rdfs:subClassOf* brick:Power_Meter .
+}
+'''
+meters = sorted(g.query(q))
+for row in meters:
+    meter = row[0]
+    data = DATA['entity%d' % counter]
+    counter += 1
+    g.add( (data, RDF.type      , BDSMAP['Data']) )
+    g.add( (meter, BDSMAP.hasData, data) )
+    g.add( (data, BDSMAP.uuid, create_dummy_value()) )
+    g.add( (data, BDSMAP.key , create_dummy_value()) )
 
 # write output
 print('Number of new relations: %u' % (len(g)-initial_relation_count))

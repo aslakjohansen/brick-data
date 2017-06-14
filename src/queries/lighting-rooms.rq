@@ -8,8 +8,8 @@ WHERE {
     ?light bf:isPartOf ?zone .
     ?zone  bf:isLocatedIn ?room .
     
-    ?room bdptl:hasArea ?area .
-    ?area bdsmap:hasData ?point .
+    ?room bdptl:hasMaxOccupants ?max_occupants .
+    ?max_occupants bdsmap:hasData ?point .
     ?point bdsmap:hasArchiver ?archiver .
     
     ?point bdsmap:uuid ?uuid .

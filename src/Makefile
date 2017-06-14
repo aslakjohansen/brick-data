@@ -9,8 +9,8 @@ clean:
 	rm    ${TARGETS}
 
 mrproper: clean
-	touch dummy~
-	rm        *~
+	touch dummy~ queries/dummy~
+	rm        *~ queries/*~
 
 
 brick-data.ttl: brick-data

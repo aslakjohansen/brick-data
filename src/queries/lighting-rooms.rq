@@ -1,0 +1,21 @@
+SELECT ?meter ?room ?uuid ?key ?query ?version
+WHERE {
+    ?meter rdf:type/rdfs:subClassOf* brick:Power_Meter .
+    ?light rdf:type/rdfs:subClassOf* brick:Light .
+    ?zone  rdf:type/rdfs:subClassOf* brick:Lighting_Zone .
+    ?room  rdf:type/rdfs:subClassOf* brick:Room .
+    ?meter bf:feeds*/bf:hasPoint ?light .
+    ?light bf:isPartOf ?zone .
+    ?zone  bf:isLocatedIn ?room .
+    
+    ?room bdptl:hasArea ?area .
+    ?area bdsmap:hasData ?point .
+    ?point bdsmap:hasArchiver ?archiver .
+    
+    ?point bdsmap:uuid ?uuid .
+    ?point bdsmap:key  ?key .
+    
+    ?archiver bdsmap:query   ?query .
+    ?archiver bdsmap:version ?version .
+}
+

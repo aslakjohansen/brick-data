@@ -1,0 +1,14 @@
+SELECT ?meter ?uuid ?key ?add ?version
+WHERE {
+    ?meter rdf:type/rdfs:subClassOf* brick:Power_Meter .
+    ?meter bdptl:hasThreshold ?threshold .
+    ?threshold bdsmap:hasData ?point .
+    ?point bdsmap:hasArchiver ?archiver .
+    
+    ?point bdsmap:uuid ?uuid .
+    ?point bdsmap:key ?key .
+    
+    ?archiver bdsmap:add ?add .
+    ?archiver bdsmap:version ?version .
+}
+

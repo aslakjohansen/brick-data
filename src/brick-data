@@ -65,6 +65,9 @@ g.add( (query_path, RDF['type'], OWL['ObjectProperty']) )
 uuid = BDSMAP['uuid']
 g.add( (uuid, RDF['type'], OWL['ObjectProperty']) )
 
+key = BDSMAP['key']
+g.add( (key, RDF['type'], OWL['ObjectProperty']) )
+
 ############################################################### static data ####
 
 StaticData = BDS['Data']

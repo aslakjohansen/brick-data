@@ -1,0 +1,14 @@
+SELECT ?area ?uuid ?key ?query ?version
+WHERE {
+    ?room rdf:type/rdfs:subClassOf* brick:Room .
+    ?room bdptl:hasArea ?area .
+    ?area bdsmap:hasData ?point .
+    ?point bdsmap:hasArchiver ?archiver .
+    
+    ?point bdsmap:uuid ?uuid .
+    ?point bdsmap:key  ?key .
+    
+    ?archiver bdsmap:query   ?query .
+    ?archiver bdsmap:version ?version .
+}
+

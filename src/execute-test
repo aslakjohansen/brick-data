@@ -1,0 +1,83 @@
+#!/usr/bin/env python3.5
+
+from os import listdir
+import json
+from time import time
+import rdflib
+
+buildingdir = 'buildings'
+querydir = 'queries'
+outputfilename = 'results.json'
+
+def load_buildings ():
+    r = []
+    
+    for filename in listdir(buildingdir):
+        if not filename.endswith('.ttl'):
+            continue
+        
+        path = '%s/%s' % (buildingdir, filename)
+        name = filename.split('.')[0]
+        model = rdflib.Graph()
+        model.parse(path, format='turtle')
+        
+        r.append({
+            'path':  path,
+            'id':    name,
+            'model': model,
+        })
+    
+    return r
+
+def load_tests ():
+    r = []
+    
+    for filename in listdir(querydir):
+        if not filename.endswith('.rq'):
+            continue
+        
+        path = '%s/%s' % (querydir, filename)
+        suite = filename.split('-')[0]
+        with open(path) as fo:
+            query = ''.join(fo.readlines())
+        
+        r.append({
+            'path':  path,
+            'suite': suite,
+            'query': query,
+        })
+    
+    return r
+
+# init
+buildings = load_buildings()
+tests     = load_tests()
+results   = {}
+
+# iteration
+for i in range(1000*1000):
+    for test in tests:
+        for building in buildings:
+            # perform test
+            t0 = time()
+            r = building['model'].query(test['query'])
+            dt = time() - t0
+            resultcount = len(list(r))
+            
+            # log result
+            suite = test['suite']
+            bid   = building['id']
+            if not suite in results: results[suite] = {}
+            if not bid in results[suite]: results[suite][bid] = []
+            results[suite][bid].append({
+                't0': t0,
+                'dt': dt,
+                'results': resultcount,
+            })
+    
+    if i % 100 == 0:
+        print('Done with iteration %u. Dumping to %s' % (i, outputfilename))
+        
+        with open(outputfilename, 'w') as fo:
+            fo.writelines([json.dumps(results, sort_keys=True, indent=4, separators=(',', ': '))])
+

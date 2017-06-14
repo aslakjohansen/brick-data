@@ -47,6 +47,9 @@ g.add( (has_data, RDF['type'], OWL['ObjectProperty']) )
 SmapData = BDSMAP['Data']
 g.add( (SmapData, RDFS.subClassOf, Data) )
 
+has_smap_data = BDSMAP['hasData']
+g.add( (has_smap_data, RDFS.subClassOf, has_data) )
+
 Archiver = BDSMAP['Archiver']
 g.add( (Archiver, RDF['type'], OWL['Class']) )
 
@@ -66,6 +69,9 @@ g.add( (uuid, RDF['type'], OWL['ObjectProperty']) )
 
 StaticData = BDS['Data']
 g.add( (StaticData, RDFS.subClassOf, Data) )
+
+has_static_data = BDS['hasData']
+g.add( (has_static_data, RDFS.subClassOf, has_data) )
 
 value = BDS['value']
 g.add( (value, RDF['type'], OWL['ObjectProperty']) )

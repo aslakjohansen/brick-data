@@ -6,9 +6,9 @@ WHERE {
     ?point bdsmap:hasArchiver ?archiver .
     
     ?point bdsmap:uuid ?uuid .
-    ?point bdsmap:key ?key .
+    ?point bdsmap:key  ?key .
     
-    ?archiver bdsmap:add ?add .
+    ?archiver bdsmap:add     ?add .
     ?archiver bdsmap:version ?version .
 }
 

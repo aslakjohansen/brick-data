@@ -1,4 +1,4 @@
-SELECT ?meter ?room ?uuid ?key ?query ?version
+SELECT DISTINCT ?meter ?room ?uuid ?key ?query ?version
 WHERE {
     ?meter rdf:type/rdfs:subClassOf* brick:Power_Meter .
     ?light rdf:type/rdfs:subClassOf* brick:Light .

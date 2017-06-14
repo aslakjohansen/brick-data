@@ -34,18 +34,18 @@ g.bind('bdsmap', BDSMAP)
 BDS = Namespace('https://brickschema.org/schema/1.0.1/BrickDataStatic#')
 g.bind('bds', BDS)
 
-##################################################################### point ####
+###################################################################### data ####
 
-Point = BD['Point']
-g.add( (Point, RDF['type'], OWL['Class']) ) # TODO: should this not be RDFS.subClassOf?
+Data = BD['Data']
+g.add( (Data, RDF['type'], OWL['Class']) ) # TODO: should this not be RDFS.subClassOf?
 
-has_point = BD['hasPoint']
-g.add( (has_point, RDF['type'], OWL['ObjectProperty']) )
+has_data = BD['hasData']
+g.add( (has_data, RDF['type'], OWL['ObjectProperty']) )
 
-################################################################ smap point ####
+################################################################# smap data ####
 
-SmapPoint = BDSMAP['Point']
-g.add( (SmapPoint, RDFS.subClassOf, Point) )
+SmapData = BDSMAP['Data']
+g.add( (SmapData, RDFS.subClassOf, Data) )
 
 Archiver = BDSMAP['Archiver']
 g.add( (Archiver, RDF['type'], OWL['Class']) )
@@ -62,10 +62,10 @@ g.add( (query_path, RDF['type'], OWL['ObjectProperty']) )
 uuid = BDSMAP['uuid']
 g.add( (uuid, RDF['type'], OWL['ObjectProperty']) )
 
-############################################################## static point ####
+############################################################### static data ####
 
-StaticPoint = BDS['Point']
-g.add( (SmapPoint, RDFS.subClassOf, Point) )
+StaticData = BDS['Data']
+g.add( (StaticData, RDFS.subClassOf, Data) )
 
 value = BDS['value']
 g.add( (value, RDF['type'], OWL['ObjectProperty']) )

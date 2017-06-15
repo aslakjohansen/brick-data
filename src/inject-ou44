@@ -35,9 +35,15 @@ BD     = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
 BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
 BDS    = Namespace('https://brickschema.org/schema/1.0.1/BrickDataStatic#')
 RDF    = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+RDFS   = Namespace('http://www.w3.org/2000/01/rdf-schema#')
 DATA   = Namespace('http://mmmi.sdu.dk/1.0.1/buildings/ou44/data#')
+BDPTL  = Namespace('http://mmmi.sdu.dk/1.0.1/buildings/ou44/bd_pt_l#')
+BDPTS  = Namespace('http://mmmi.sdu.dk/1.0.1/buildings/ou44/bd_pt_s#')
 g.bind('rdf'  , RDF)
-g.bind('data', DATA)
+g.bind('rdfs' , RDFS)
+g.bind('data' , DATA)
+g.bind('bdptl', BDPTL)
+g.bind('bdpts', BDPTS)
 
 # create archiver
 archiver = DATA['archiver']
@@ -45,6 +51,14 @@ g.add( (archiver, RDF.type      , BDSMAP['Archiver']) )
 g.add( (archiver, BDSMAP.add    , create_dummy_value()) )
 g.add( (archiver, BDSMAP.query  , create_dummy_value()) )
 g.add( (archiver, BDSMAP.version, create_dummy_value()) )
+
+# create lighting modeling approach
+LightingThresholdProperty = BDPTL['ThresholdProperty']
+g.add( (LightingThresholdProperty, RDFS.subClassOf, BD['Property']) )
+LightingApproach = BDPTL['Approach']
+g.add( (LightingApproach, RDF.type, BD['Approach']) )
+hasPropertyLightingThreshold = BDPTL['hasPropertyThreshold']
+g.add( (hasPropertyLightingThreshold, RDFS.subClassOf, BD['hasProperty']) )
 
 # attach metering properties and streams
 q = '''
@@ -56,12 +70,26 @@ WHERE {
 meters = sorted(g.query(q))
 for row in meters:
     meter = row[0]
-    data = DATA['entity%d' % counter]
+    
+    # attach data stream
+    data = DATA['meter/data%d' % counter]
     counter += 1
     g.add( (data, RDF.type      , BDSMAP['Data']) )
     g.add( (meter, BDSMAP.hasData, data) )
     g.add( (data, BDSMAP.uuid, create_dummy_value()) )
     g.add( (data, BDSMAP.key , create_dummy_value()) )
+    g.add( (data, BDSMAP.hasArchiver , archiver) )
+    
+    # attach threshold property
+    threshold_data = DATA['meter/threshold/data%d' % counter]
+    counter += 1
+    threshold_prop = DATA['meter/threshold/property%d' % counter]
+    counter += 1
+    g.add( (meter, hasPropertyLightingThreshold, threshold_prop) )
+    g.add( (threshold_prop, BDSMAP.hasData, threshold_data) )
+    g.add( (threshold_data, BDSMAP.uuid, create_dummy_value()) )
+    g.add( (threshold_data, BDSMAP.key , create_dummy_value()) )
+    g.add( (threshold_data, BDSMAP.hasArchiver , archiver) )
 
 # write output
 print('Number of new relations: %u' % (len(g)-initial_relation_count))

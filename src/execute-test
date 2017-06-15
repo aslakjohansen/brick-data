@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python
 
 from os import listdir
 import json
@@ -44,6 +44,7 @@ def load_tests ():
         r.append({
             'path':  path,
             'suite': suite,
+            'test':  filename[len(suite)+1:-3],
             'query': query,
         })
     
@@ -55,7 +56,7 @@ tests     = load_tests()
 results   = {}
 
 # iteration
-for i in range(1000*1000):
+for i in range(101):
     for test in tests:
         for building in buildings:
             # perform test
@@ -66,18 +67,25 @@ for i in range(1000*1000):
             
             # log result
             suite = test['suite']
+            testcase = test['test']
             bid   = building['id']
             if not suite in results: results[suite] = {}
-            if not bid in results[suite]: results[suite][bid] = []
-            results[suite][bid].append({
+            if not testcase in results[suite]: results[suite][testcase] = {}
+            if not bid in results[suite][testcase]: results[suite][testcase][bid] = []
+            results[suite][testcase][bid].append({
                 't0': t0,
                 'dt': dt,
                 'results': resultcount,
+                'building': building['path'],
+                'query': test['path'],
             })
     
     if i % 100 == 0:
         print('Done with iteration %u. Dumping to %s' % (i, outputfilename))
         
         with open(outputfilename, 'w') as fo:
-            fo.writelines([json.dumps(results, sort_keys=True, indent=4, separators=(',', ': '))])
+            dump = json.dumps(results, sort_keys=True, indent=4, separators=(',', ': '))
+            fo.writelines(dump)
+            print('written (%s|%s) to %s' % (type(dump), len(dump), outputfilename))
+#            print(results)
 

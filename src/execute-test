@@ -11,11 +11,16 @@ outputfilename = 'results.json'
 blacklist_suite = [
     'solar',
 ]
+blacklist_building = [
+    'buildings/ou44.ttl',
+]
 blacklist_qpath = [
-    'queries/lighting-concumption.rq',
+    'queries/lighting-consumption.rq',
     'queries/lighting-threshold-read.rq',
     'queries/lighting-threshold-write.rq',
 ]
+
+BRICKFRAME = rdflib.Namespace('http://buildsys.org/ontologies/BrickFrame#')
 
 def load_buildings ():
     r = []
@@ -28,6 +33,45 @@ def load_buildings ():
         name = filename.split('.')[0]
         model = rdflib.Graph()
         model.parse(path, format='turtle')
+        
+        
+        # inject inverse relationships
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:hasPart ?b . }"):
+            model.add((row[1], BRICKFRAME.isPartOf, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isPartOf ?b . }"):
+            model.add((row[1], BRICKFRAME.hasPart, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:hasPoint ?b . }"):
+            model.add((row[1], BRICKFRAME.isPointOf, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isPointOf ?b . }"):
+            model.add((row[1], BRICKFRAME.hasPoint, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:feeds ?b . }"):
+            model.add((row[1], BRICKFRAME.isFedBy, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isFedBy ?b . }"):
+            model.add((row[1], BRICKFRAME.feeds, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:controls ?b . }"):
+            model.add((row[1], BRICKFRAME.isControlledBy, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isControlledBy ?b . }"):
+            model.add((row[1], BRICKFRAME.controls, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:contains ?b . }"):
+            model.add((row[1], BRICKFRAME.isLocatedIn, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isPartOf ?b . }"):
+            model.add((row[1], BRICKFRAME.hasPart, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:hasOutput ?b . }"):
+            model.add((row[1], BRICKFRAME.isOutputOf, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isOutputOf ?b . }"):
+            model.add((row[1], BRICKFRAME.hasOutput, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:hasInput ?b . }"):
+            model.add((row[1], BRICKFRAME.isInputOf, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isInputOf ?b . }"):
+            model.add((row[1], BRICKFRAME.hasInput, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:hasTagSet ?b . }"):
+            model.add((row[1], BRICKFRAME.isTagSetOf, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isTagSetOf ?b . }"):
+            model.add((row[1], BRICKFRAME.hasTagSet, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:hasToken ?b . }"):
+            model.add((row[1], BRICKFRAME.isTokenOf, row[0]))
+        for row in model.query("SELECT ?a ?b WHERE { ?a bf:isTokenOf ?b . }"):
+            model.add((row[1], BRICKFRAME.hasToken, row[0]))
         
         r.append({
             'path':  path,
@@ -64,7 +108,7 @@ tests     = load_tests()
 results   = {}
 
 # iteration
-for i in range(11):
+for i in range(1):
     for test in tests:
         for building in buildings:
             suite = test['suite']
@@ -73,6 +117,8 @@ for i in range(11):
             bid   = building['id']
             
             # perform blacklisting
+            if building['path'] in blacklist_building:
+                continue
             if qpath in blacklist_qpath:
                 continue
             if suite in blacklist_suite:
@@ -83,6 +129,7 @@ for i in range(11):
             r = building['model'].query(test['query'])
             dt = time() - t0
             resultcount = len(list(r))
+#            resultcount = list(r)
             
             # log result
             if not suite in results: results[suite] = {}

@@ -22,7 +22,7 @@ buildings:
 	mkdir buildings
 
 buildings/gth.ttl: inject-ou44 brick-data.ttl
-	./inject-ou44 ../../GroundTruth/building_instances/gtc_brick.ttl buildings/gth.ttl
+	./inject-ou44 ../../gth-brick/src/gth.ttl buildings/gth.ttl
 
 buildings/ou44.ttl: inject-ou44 brick-data.ttl
 	./inject-ou44 ../../ou44-brick/src/sdu_ou44_brick.ttl buildings/ou44.ttl

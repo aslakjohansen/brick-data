@@ -2,11 +2,9 @@ SELECT DISTINCT ?meter ?room ?uuid ?key ?query ?version
 WHERE {
     ?meter rdf:type/rdfs:subClassOf* brick:Power_Meter .
     ?light rdf:type/rdfs:subClassOf* brick:Light .
-    ?zone  rdf:type/rdfs:subClassOf* brick:Lighting_Zone .
     ?room  rdf:type/rdfs:subClassOf* brick:Room .
-    ?meter bf:feeds*/bf:hasPoint ?light .
-    ?light bf:isPartOf ?zone .
-    ?zone  bf:isLocatedIn ?room .
+    ?meter bf:feeds*/bf:isPointOf ?light .
+    ?light (bf:isPartOf|bf:isLocatedIn)+ ?room .
     
     ?room bdptl:hasPropertyMaxOccupants ?max_occupants .
     ?max_occupants bdsmap:hasData ?point .

@@ -1,0 +1,78 @@
+#!/usr/bin/env python3.5
+
+'''
+
+        |b|b|
+        |1|2|
+ +------+-+-+
+a|test 1| | |
+b+------+-+-+
+c|test 2| | |
+d+------+-+-+
+e|test 3| | |
+ +------+-+-+
+ |test 4| | |
+f+------+-+-+
+g|test 5| | |
+h+------+-+-+
+i|test 6| | |
+j+------+-+-+
+ |test 7| | |
+ +------+-+-+
+
+'''
+
+import json
+
+# read input
+with open('results.json') as fo:
+    data = json.loads(''.join(fo.readlines()))
+
+# discover dimensions
+suites = {}
+buildings = []
+for suite in data:
+    suites[suite] = []
+    for test in data[suite]:
+        suites[suite].append(test)
+        for building in data[suite][test]:
+            if not building in buildings:
+                buildings.append(building)
+testcount = sum(map(lambda key: len(suites[key]), suites.keys()))
+for suite in suites:
+    suites[suite].sort()
+buildings.sort()
+suitenames = sorted(suites.keys())
+
+# construct output
+lines = []
+lines.append('\\begin{figure}')
+lines.append('  \\begin{center}')
+lines.append('    \\begin{tabular}{rl|c|c|}')
+dyn = ' & '.join(buildings)
+lines.append('        \\cline{3-4}')
+lines.append('        & & %s \\\\' % dyn)
+lines.append('        \\cline{1-4}')
+for i in range(len(suitenames)):
+    suite = suitenames[i]
+    testcount = len(suites[suite])
+    
+    for j in range(len(suites[suite])):
+        test = suites[suite][j]
+        lines.append('        \\multicolumn{1}{ |c  }{\\multirow{%s}{*}{%s} } &' % (testcount, suite if j==0 else ''))
+        dyn = ' & '.join(map(lambda building: str(data[suite][test][building][0]['results']), buildings))
+        lines.append('        \\multicolumn{1}{ |c| }{%s} & %s \\\\' % (test, dyn))
+        lines.append('        \\cline{%u-4}' % (1 if j==len(suites[suite])-1 else 2))
+lines.append('    \\end{tabular}')
+lines.append('  \\end{center}')
+lines.append('  \\vspace{-5mm}')
+lines.append('  \\caption{\\label{fig:coverage} Coverage of queries on building models}')
+lines.append('\\end{figure}')
+lines.append('')
+
+print(data)
+
+# write output
+with open('coverage_table.tex', 'w') as fo:
+    fo.writelines(map(lambda line: '%s\n' % line, lines))
+

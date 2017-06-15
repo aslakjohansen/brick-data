@@ -17,8 +17,8 @@ def create_dummy_value ():
 # guard: commandline arguments
 if len(sys.argv) != 3:
     print('Syntax: %s INPUT_FILENAME OUTPUT_FILENAME' % sys.argv[0])
-    print('        %s ../../GroundTruth/building_instances/gtc_brick.ttl gth.ttl' % sys.argv[0])
-    print('        %s ../../ou44-brick/src/sdu_ou44_brick.ttl ou44.ttl' % sys.argv[0])
+    print('        %s ../../GroundTruth/building_instances/gtc_brick.ttl buildings/gth.ttl' % sys.argv[0])
+    print('        %s ../../ou44-brick/src/sdu_ou44_brick.ttl buildings/ou44.ttl' % sys.argv[0])
     exit()
 ifilename = sys.argv[1]
 ofilename = sys.argv[2]

@@ -8,6 +8,9 @@ import rdflib
 buildingdir = 'buildings'
 querydir = 'queries'
 outputfilename = 'results.json'
+blacklist_suite = [
+    'solar',
+]
 
 def load_buildings ():
     r = []
@@ -59,6 +62,13 @@ results   = {}
 for i in range(101):
     for test in tests:
         for building in buildings:
+            suite = test['suite']
+            testcase = test['test']
+            bid   = building['id']
+            
+            if suite in blacklist_suite:
+                continue
+            
             # perform test
             t0 = time()
             r = building['model'].query(test['query'])
@@ -66,9 +76,6 @@ for i in range(101):
             resultcount = len(list(r))
             
             # log result
-            suite = test['suite']
-            testcase = test['test']
-            bid   = building['id']
             if not suite in results: results[suite] = {}
             if not testcase in results[suite]: results[suite][testcase] = {}
             if not bid in results[suite][testcase]: results[suite][testcase][bid] = []

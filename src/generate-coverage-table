@@ -70,8 +70,6 @@ lines.append('  \\caption{\\label{fig:coverage} Coverage of queries on building 
 lines.append('\\end{figure}')
 lines.append('')
 
-print(data)
-
 # write output
 with open('coverage_table.tex', 'w') as fo:
     fo.writelines(map(lambda line: '%s\n' % line, lines))

@@ -9,15 +9,15 @@ buildingdir = 'buildings'
 querydir = 'queries'
 outputfilename = 'results.json'
 blacklist_suite = [
-    'solar',
+#    'solar',
 ]
 blacklist_building = [
-    'buildings/ou44.ttl',
+#    'buildings/ou44.ttl',
 ]
 blacklist_qpath = [
-    'queries/lighting-consumption.rq',
-    'queries/lighting-threshold-read.rq',
-    'queries/lighting-threshold-write.rq',
+#    'queries/lighting-consumption.rq',
+#    'queries/lighting-threshold-read.rq',
+#    'queries/lighting-threshold-write.rq',
 ]
 
 BRICKFRAME = rdflib.Namespace('http://buildsys.org/ontologies/BrickFrame#')
@@ -108,7 +108,7 @@ tests     = load_tests()
 results   = {}
 
 # iteration
-for i in range(1):
+for i in range(101):
     for test in tests:
         for building in buildings:
             suite = test['suite']
@@ -143,7 +143,7 @@ for i in range(1):
                 'query': test['path'],
             })
     
-    if i % 10 == 0:
+    if i % 100 == 0:
         print('Done with iteration %u. Dumping to %s' % (i, outputfilename))
         
         with open(outputfilename, 'w') as fo:

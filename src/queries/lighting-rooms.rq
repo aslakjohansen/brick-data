@@ -8,7 +8,7 @@ WHERE {
     ?light bf:isPartOf ?zone .
     ?zone  bf:isLocatedIn ?room .
     
-    ?room bdptl:hasMaxOccupants ?max_occupants .
+    ?room bdptl:hasPropertyMaxOccupants ?max_occupants .
     ?max_occupants bdsmap:hasData ?point .
     ?point bdsmap:hasArchiver ?archiver .
     

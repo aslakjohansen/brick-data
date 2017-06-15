@@ -59,6 +59,8 @@ LightingApproach = BDPTL['Approach']
 g.add( (LightingApproach, RDF.type, BD['Approach']) )
 hasPropertyLightingThreshold = BDPTL['hasPropertyThreshold']
 g.add( (hasPropertyLightingThreshold, RDFS.subClassOf, BD['hasProperty']) )
+hasPropertyLightingMaxOccupants = BDPTL['hasPropertyMaxOccupants']
+g.add( (hasPropertyLightingMaxOccupants, RDFS.subClassOf, BD['hasProperty']) )
 
 # attach metering properties and streams
 q = '''
@@ -90,6 +92,28 @@ for row in meters:
     g.add( (threshold_data, BDSMAP.uuid, create_dummy_value()) )
     g.add( (threshold_data, BDSMAP.key , create_dummy_value()) )
     g.add( (threshold_data, BDSMAP.hasArchiver , archiver) )
+
+# attach room properties
+q = '''
+SELECT ?room
+WHERE {
+    ?room rdf:type/rdfs:subClassOf* brick:Room .
+}
+'''
+rooms = sorted(g.query(q))
+for row in rooms:
+    room = row[0]
+    
+    # attach maxOccupant property
+    maxocc_data = DATA['room/maxocc/data%d' % counter]
+    counter += 1
+    maxocc_prop = DATA['room/maxocc/property%d' % counter]
+    counter += 1
+    g.add( (room, hasPropertyLightingMaxOccupants, maxocc_prop) )
+    g.add( (maxocc_prop, BDSMAP.hasData, maxocc_data) )
+    g.add( (maxocc_data, BDSMAP.uuid, create_dummy_value()) )
+    g.add( (maxocc_data, BDSMAP.key , create_dummy_value()) )
+    g.add( (maxocc_data, BDSMAP.hasArchiver , archiver) )
 
 # write output
 print('Number of new relations: %u' % (len(g)-initial_relation_count))

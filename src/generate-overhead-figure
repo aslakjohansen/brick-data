@@ -55,7 +55,7 @@ for suite in data:
         lines.append('plot(dens_gth, xlim = xlim, ylim = ylim, xlab = \'Time/[s]\', main = \'Distribution of %s - %s\',  panel.first = grid())' % (suite, test))
         lines.append('polygon(dens_gth , density = -1, col = col_gth)')
         lines.append('polygon(dens_ou44, density = -1, col = col_ou44)')
-        lines.append('legend(\'topleft\',c(\'GTH\',\'OU44\'), fill = c(col_gth, col_ou44), bty = \'n\', border = NA)')
+        lines.append('legend(\'topright\',c(\'GTH\',\'OU44\'), fill = c(col_gth, col_ou44), bty = \'n\', border = NA)')
         lines.append('')
         lines.append('dev.off()')
         filename = '%s/%s_%s.r' % (dirname, suite, test)

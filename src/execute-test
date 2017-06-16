@@ -9,7 +9,7 @@ buildingdir = 'buildings'
 querydir = 'queries'
 outputfilename = 'results.json'
 blacklist_suite = [
-#    'solar',
+    'solar',
 ]
 blacklist_building = [
 #    'buildings/ou44.ttl',

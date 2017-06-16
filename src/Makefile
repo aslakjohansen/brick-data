@@ -27,6 +27,6 @@ buildings/gth.ttl: inject-ou44 brick-data.ttl
 buildings/ou44.ttl: inject-ou44 brick-data.ttl
 	./inject-ou44 ../../ou44-brick/src/sdu_ou44_brick.ttl buildings/ou44.ttl
 
-results.json: execute-test buildings/gth.ttl buildings/ou44.ttl
+results.json: execute-test buildings/gth.ttl buildings/ou44.ttl queries/*
 	./execute-test
 

@@ -37,8 +37,6 @@ for suite in data:
         lines.append('pdf(\'%s/%s_%s.pdf\')' % (dirname, suite, test))
         lines.append('')
         lines.append('# read inputs')
-#        lines.append('gth  <- read.table("%s/%s_%s_gth.csv", header = FALSE, sep = ",")' % (dirname, suite, test))
-#        lines.append('ou44 <- read.table("%s/%s_%s_ou44.csv", header = FALSE, sep = ",")' % (dirname, suite, test))
         lines.append('gth  <- scan("%s/%s_%s_gth.csv")' % (dirname, suite, test))
         lines.append('ou44 <- scan("%s/%s_%s_ou44.csv")' % (dirname, suite, test))
         lines.append('print(gth)')

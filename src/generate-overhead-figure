@@ -4,11 +4,14 @@ import json
 from subprocess import Popen, PIPE, STDOUT
 
 dirname = 'figs'
+figs = []
+colcount = 4
+figscale = 0.2
+
 
 def system (command):
     p = Popen(command, shell=True, stdout=PIPE, close_fds=True)
     return p.stdout.readlines()
-
 
 # read input
 with open('results.json') as fo:
@@ -62,4 +65,22 @@ for suite in data:
         
         # execute r file
         system('./%s' % filename)
+        
+        # register plot
+        figs.append('%s/%s_%s.pdf' % (dirname, suite, test))
+
+lines = []
+lines.append('\\begin{figure*}')
+lines.append('  \\begin{center}')
+for i in range(len(figs)):
+    lines.append('    \\scalebox{%f}{\\includeRaw{%s}}' % (figscale, figs[i]))
+    if i!=len(figs)-1 and (i-1) % colcount == colcount-2:
+        lines.append('    \\\\')
+lines.append('  \\end{center}')
+lines.append('  \\vspace{-5mm}')
+lines.append('  \\caption{\\label{fig:overhead} Overhead of queries on building models}')
+lines.append('\\end{figure*}')
+with open('overhead_overhead.tex', 'w') as fo:
+    fo.writelines(map(lambda line: '%s\n' % line, lines))
+
 

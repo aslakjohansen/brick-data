@@ -11,7 +11,7 @@ querydir = 'queries'
 outputfilename = 'results.json'
 blacklist_suite = [
     'solar',
-    'lighting',
+#    'lighting',
 ]
 blacklist_building = [
 #    'buildings/gth.ttl',
@@ -134,8 +134,8 @@ for i in range(1):
             t0 = time()
             r = building['model'].query(test['query'])
             dt = time() - t0
-            resultcount = len(list(r))
-#            resultcount = list(r)
+#            resultcount = len(list(r))
+            resultcount = list(r)
             
             # log result
             if not suite in results: results[suite] = {}

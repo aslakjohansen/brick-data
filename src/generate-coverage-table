@@ -22,6 +22,43 @@ j+------+-+-+
 
 import json
 
+total = {
+    'lighting': {
+        'consumption': { # one per power meter
+            'gth':  12,
+            'ou44': 24,
+        },
+        'rooms': { # ideally, one per room
+            'gth':  106,
+            'ou44': 605, # verify-ou44-lighting-rooms reveals nothing bad
+        },
+        'threshold-read': { # one per power meter
+            'gth':  12,
+            'ou44': 24,
+        },
+        'threshold-write': { # one per power meter
+            'gth':  12,
+            'ou44': 24,
+        },
+    },
+    'roomprediction': { # one per room with both temp and co2
+        'inputs': {
+            'gth':  53,
+            'ou44': 92,
+        },
+    },
+    'solar': {
+        'threshold-read': {
+            'gth':  0,
+            'ou44': 0,
+        },
+        'threshold-write': {
+            'gth':  0,
+            'ou44': 0,
+        },
+    },
+}
+
 # read input
 with open('results.json') as fo:
     data = json.loads(''.join(fo.readlines()))
@@ -58,7 +95,7 @@ for i in range(len(suitenames)):
     for j in range(len(suites[suite])):
         test = suites[suite][j]
         lines.append('        \\multicolumn{1}{ |c  }{\\multirow{%s}{*}{%s} } &' % (testcount, suite if j==0 else ''))
-        dyn = ' & '.join(map(lambda building: str(data[suite][test][building][0]['results']), buildings))
+        dyn = ' & '.join(map(lambda building: '%d of %d' % (data[suite][test][building][0]['results'], total[suite][test][building]), buildings))
         lines.append('        \\multicolumn{1}{ |c| }{%s} & %s \\\\' % (test, dyn))
         lines.append('        \\cline{%u-4}' % (1 if j==len(suites[suite])-1 else 2))
 lines.append('    \\end{tabular}')

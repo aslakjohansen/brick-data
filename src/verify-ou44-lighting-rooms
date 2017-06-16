@@ -1,0 +1,131 @@
+#!/usr/bin/env python3.5
+
+import json
+import sys
+
+multipliers = {
+    '1546': 1,
+    '1550': 2,
+    '1551': 3,
+    '1560': 2,
+    '1561': 3,
+    '1563': 2,
+    '1564': 3,
+    '1567': 2,
+    '1568': 3,
+    '1572': 2,
+    '1573': 3,
+    '1577': 2,
+    '1578': 3,
+    '1753': 4,
+    '1754': 4,
+    '1755': 4,
+    '1756': 4,
+    '1757': 4,
+    '1758': 4,
+    '1581': 2,
+    '1582': 3,
+    '1761': 4,
+    '1762': 4,
+    '1763': 4,
+}
+
+################################################################################
+
+# args
+if len(sys.argv) != 2:
+    print('Syntax: %s PATH' % sys.argv[0])
+    print('        %s ~/vcs/git/ou44-brick/var/rooms.json' % sys.argv[0])
+    sys.exit(1)
+filename = sys.argv[1]
+
+# load input
+with open(filename) as fo:
+    rooms = json.loads(''.join(fo.readlines()))
+with open('results.json') as fo:
+    results = json.loads(''.join(fo.readlines()))
+
+# count
+count = 0
+groundtruth = []
+for roomid in rooms:
+    room = rooms[roomid]
+    
+    # init
+    meters = []
+    
+    # collect
+    for light_zone in room['light-zones']:
+        for entry in room['light-zones'][light_zone]:
+            meter = entry['meter']
+            if not meter in meters:
+                meters.append(meter)
+    
+    # summarize
+    for meter in meters:
+        groundtruth.append([roomid,meter, False])
+    count += sum(map(lambda meter: multipliers[meter], meters))
+
+# present
+print('Expected number of matches: %d' % count)
+print('')
+
+# annotate found
+for result in results['lighting']['rooms']['ou44'][0]['results']:
+    meter = result[0].split('/')[-2]
+    room  = result[1].split('/')[-2].replace('\u00d8', 'Ø')
+    for entry in groundtruth:
+        if entry[0]==room and entry[1]==meter:
+            entry[2] = True
+
+# present missing 1
+print('Anything in groundtruth but not in result?')
+for entry in groundtruth:
+    if not entry[2]:
+        print('- missing %s %s' % (entry[0], entry[1]))
+print('')
+
+# present missing 2
+print('Anything in result but not in groundtruth?')
+for entry in groundtruth:
+    gt_room  = entry[0]
+    gt_meter = entry[1]
+    
+    # search
+    found = False
+    for result in results['lighting']['rooms']['ou44'][0]['results']:
+        meter = result[0].split('/')[-2]
+        room  = result[1].split('/')[-2].replace('\u00d8', 'Ø')
+        
+        if meter==gt_meter and room==gt_room:
+            found = True
+    
+    if not found:
+        print('missing %s %s' % (gt_room, gt_meter))
+print('')
+
+# present: not unique 1
+print('Anything not unique in groundtruth?')
+for entry in groundtruth:
+    ccount = 0
+    for entry2 in groundtruth:
+        if entry[0] == entry2[0] and entry[1] == entry2[1]:
+            ccount += 1
+    if ccount>1:
+        print('- %d collition(s) on %s %s' % (ccount-1, entry[0], entry[1]))
+print('')
+
+# present: not unique 2
+print('Anything not unique in result?')
+for result in results['lighting']['rooms']['ou44'][0]['results']:
+    meter = result[0].split('/')[-2]
+    room  = result[1].split('/')[-2].replace('\u00d8', 'Ø')
+    ccount = 0
+    for result2 in results['lighting']['rooms']['ou44'][0]['results']:
+        meter2 = result2[0].split('/')[-2]
+        room2  = result2[1].split('/')[-2].replace('\u00d8', 'Ø')
+        if meter == meter2 and room == room2:
+            ccount += 1
+    if ccount>1:
+        print('- %d collition(s) on %s %s' % (ccount-1, entry[0], entry[1]))
+

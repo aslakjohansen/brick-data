@@ -66,7 +66,6 @@ lines.append('  \\end{center}')
 lines.append('  \\vspace{-5mm}')
 lines.append('  \\caption{\\label{fig:coverage} Coverage of queries on building models}')
 lines.append('\\end{figure}')
-lines.append('')
 
 # write output
 with open('coverage_table.tex', 'w') as fo:

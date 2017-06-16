@@ -1,0 +1,157 @@
+SELECT DISTINCT ?room
+                ?stemp_uuid ?stemp_key ?stemp_query ?stemp_version
+                ?sco2_uuid ?sco2_key ?sco2_query ?sco2_version
+                ?ewa_uuid ?ewa_key ?ewa_query ?ewa_version
+                ?ilewtc_uuid ?ilewtc_key ?ilewtc_query ?ilewtc_version
+                ?olewtc_uuid ?olewtc_key ?olewtc_query ?olewtc_version
+                ?co2_uuid ?co2_key ?co2_query ?co2_version
+                ?pcf_uuid ?pcf_key ?pcf_query ?pcf_version
+                ?fp_uuid ?fp_key ?fp_query ?fp_version
+                ?olewtr_uuid ?olewtr_key ?olewtr_query ?olewtr_version
+                ?mlewtr_uuid ?mlewtr_key ?mlewtr_query ?mlewtr_version
+                ?sh_uuid ?sh_key ?sh_query ?sh_version
+                ?t_uuid ?t_key ?t_query ?t_version
+                ?c_uuid ?c_key ?c_query ?c_version
+                ?ir_uuid ?ir_key ?ir_query ?ir_version
+                ?v_uuid ?v_key ?v_query ?v_version
+WHERE {
+    ?room rdf:type/rdfs:subClassOf* brick:Room .
+    
+    # sensor: temperature
+    ?stemp rdf:type/rdfs:subClassOf* brick:Temperature_Sensor .
+    ?stemp bf:isPointOf ?room .
+    ?stemp bdsmap:hasData ?stemp_point .
+    ?stemp_point bdsmap:hasArchiver ?stemp_archiver .
+    ?stemp_point bdsmap:uuid ?stemp_uuid .
+    ?stemp_point bdsmap:key  ?stemp_key .
+    ?stemp_archiver bdsmap:query   ?stemp_query .
+    ?stemp_archiver bdsmap:version ?stemp_version .
+    
+    # sensor: co2
+    ?sco2 rdf:type/rdfs:subClassOf* brick:CO2_Sensor .
+    ?sco2 bf:isPointOf ?room .
+    ?sco2 bdsmap:hasData ?sco2_point .
+    ?sco2_point bdsmap:hasArchiver ?sco2_archiver .
+    ?sco2_point bdsmap:uuid ?sco2_uuid .
+    ?sco2_point bdsmap:key  ?sco2_key .
+    ?sco2_archiver bdsmap:query   ?sco2_query .
+    ?sco2_archiver bdsmap:version ?sco2_version .
+    
+    # property: ewa - external wall area
+    ?room bdrp:hasPropertyEwa ?ewa .
+    ?ewa bdsmap:hasData ?ewa_point .
+    ?ewa_point bdsmap:hasArchiver ?ewa_archiver .
+    ?ewa_point bdsmap:uuid ?ewa_uuid .
+    ?ewa_point bdsmap:key  ?ewa_key .
+    ?ewa_archiver bdsmap:query   ?ewa_query .
+    ?ewa_archiver bdsmap:version ?ewa_version .
+    
+    # property: ilewtc - inner layer external wall thermal capacitance
+    ?room bdrp:hasPropertyIlewtc ?ilewtc .
+    ?ilewtc bdsmap:hasData ?ilewtc_point .
+    ?ilewtc_point bdsmap:hasArchiver ?ilewtc_archiver .
+    ?ilewtc_point bdsmap:uuid ?ilewtc_uuid .
+    ?ilewtc_point bdsmap:key  ?ilewtc_key .
+    ?ilewtc_archiver bdsmap:query   ?ilewtc_query .
+    ?ilewtc_archiver bdsmap:version ?ilewtc_version .
+    
+    # property: olewtc - outer layer external wall thermal capacitance
+    ?room bdrp:hasPropertyOlewtc ?olewtc .
+    ?olewtc bdsmap:hasData ?olewtc_point .
+    ?olewtc_point bdsmap:hasArchiver ?olewtc_archiver .
+    ?olewtc_point bdsmap:uuid ?olewtc_uuid .
+    ?olewtc_point bdsmap:key  ?olewtc_key .
+    ?olewtc_archiver bdsmap:query   ?olewtc_query .
+    ?olewtc_archiver bdsmap:version ?olewtc_version .
+    
+    # property: co2 - CO2 concentration
+    ?room bdrp:hasPropertyCO2 ?co2 .
+    ?co2 bdsmap:hasData ?co2_point .
+    ?co2_point bdsmap:hasArchiver ?co2_archiver .
+    ?co2_point bdsmap:uuid ?co2_uuid .
+    ?co2_point bdsmap:key  ?co2_key .
+    ?co2_archiver bdsmap:query   ?co2_query .
+    ?co2_archiver bdsmap:version ?co2_version .
+    
+    # property: pcf - person CO2 flow
+    ?room bdrp:hasPropertyPcf ?pcf .
+    ?pcf bdsmap:hasData ?pcf_point .
+    ?pcf_point bdsmap:hasArchiver ?pcf_archiver .
+    ?pcf_point bdsmap:uuid ?pcf_uuid .
+    ?pcf_point bdsmap:key  ?pcf_key .
+    ?pcf_archiver bdsmap:query   ?pcf_query .
+    ?pcf_archiver bdsmap:version ?pcf_version .
+    
+    # property: fp - fitting parameter
+    ?room bdrp:hasPropertyFp ?fp .
+    ?fp bdsmap:hasData ?fp_point .
+    ?fp_point bdsmap:hasArchiver ?fp_archiver .
+    ?fp_point bdsmap:uuid ?fp_uuid .
+    ?fp_point bdsmap:key  ?fp_key .
+    ?fp_archiver bdsmap:query   ?fp_query .
+    ?fp_archiver bdsmap:version ?fp_version .
+    
+    # property: olewtr - outer layer external wall thermal resistance
+    ?room bdrp:hasPropertyOlewtr ?olewtr .
+    ?olewtr bdsmap:hasData ?olewtr_point .
+    ?olewtr_point bdsmap:hasArchiver ?olewtr_archiver .
+    ?olewtr_point bdsmap:uuid ?olewtr_uuid .
+    ?olewtr_point bdsmap:key  ?olewtr_key .
+    ?olewtr_archiver bdsmap:query   ?olewtr_query .
+    ?olewtr_archiver bdsmap:version ?olewtr_version .
+    
+    # property: mlewtr - mid layer external wall thermal resistance
+    ?room bdrp:hasPropertyMlewtr ?mlewtr .
+    ?mlewtr bdsmap:hasData ?mlewtr_point .
+    ?mlewtr_point bdsmap:hasArchiver ?mlewtr_archiver .
+    ?mlewtr_point bdsmap:uuid ?mlewtr_uuid .
+    ?mlewtr_point bdsmap:key  ?mlewtr_key .
+    ?mlewtr_archiver bdsmap:query   ?mlewtr_query .
+    ?mlewtr_archiver bdsmap:version ?mlewtr_version .
+    
+    # property: sh - solar heatgain
+    ?room bdrp:hasPropertySh ?sh .
+    ?sh bdsmap:hasData ?sh_point .
+    ?sh_point bdsmap:hasArchiver ?sh_archiver .
+    ?sh_point bdsmap:uuid ?sh_uuid .
+    ?sh_point bdsmap:key  ?sh_key .
+    ?sh_archiver bdsmap:query   ?sh_query .
+    ?sh_archiver bdsmap:version ?sh_version .
+    
+    # property: t - temperature (TVeStp)
+    ?room bdrp:hasPropertyT ?t .
+    ?t bdsmap:hasData ?t_point .
+    ?t_point bdsmap:hasArchiver ?t_archiver .
+    ?t_point bdsmap:uuid ?t_uuid .
+    ?t_point bdsmap:key  ?t_key .
+    ?t_archiver bdsmap:query   ?t_query .
+    ?t_archiver bdsmap:version ?t_version .
+    
+    # property: c - capacity
+    ?room bdrp:hasPropertyC ?c .
+    ?c bdsmap:hasData ?c_point .
+    ?c_point bdsmap:hasArchiver ?c_archiver .
+    ?c_point bdsmap:uuid ?c_uuid .
+    ?c_point bdsmap:key  ?c_key .
+    ?c_archiver bdsmap:query   ?c_query .
+    ?c_archiver bdsmap:version ?c_version .
+    
+    # property: ir - infiltration rate
+    ?room bdrp:hasPropertyIr ?ir .
+    ?ir bdsmap:hasData ?ir_point .
+    ?ir_point bdsmap:hasArchiver ?ir_archiver .
+    ?ir_point bdsmap:uuid ?ir_uuid .
+    ?ir_point bdsmap:key  ?ir_key .
+    ?ir_archiver bdsmap:query   ?ir_query .
+    ?ir_archiver bdsmap:version ?ir_version .
+    
+    # property: v - volume
+    ?room bdrp:hasPropertyV ?v .
+    ?v bdsmap:hasData ?v_point .
+    ?v_point bdsmap:hasArchiver ?v_archiver .
+    ?v_point bdsmap:uuid ?v_uuid .
+    ?v_point bdsmap:key  ?v_key .
+    ?v_archiver bdsmap:query   ?v_query .
+    ?v_archiver bdsmap:version ?v_version .
+    
+}

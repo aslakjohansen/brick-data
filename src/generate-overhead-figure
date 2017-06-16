@@ -1,0 +1,71 @@
+#!/usr/bin/env python3.5
+
+import json
+from os import mkdir
+from subprocess import Popen, PIPE, STDOUT
+
+dirname = 'figs'
+
+def system (command):
+    p = Popen(command, shell=True, stdout=PIPE, close_fds=True)
+    return p.stdout.readlines()
+
+
+# read input
+with open('results.json') as fo:
+    data = json.loads(''.join(fo.readlines()))
+
+# create output directory
+#mkdir(dirname)
+
+# process
+for suite in data:
+    for test in data[suite]:
+        for building in data[suite][test]:
+            # generate csv file
+            lines = []
+            for sample in map(lambda entry: entry['dt'], data[suite][test][building]):
+                lines.append('%f\n' % sample)
+            filename = '%s/%s_%s_%s.csv' % (dirname, suite, test, building)
+            with open(filename, 'w') as fo:
+                fo.writelines(lines)
+        
+        # generate r file
+        lines = []
+        lines.append('#!/usr/bin/env r')
+        lines.append('')
+        lines.append('pdf(\'%s/%s_%s.pdf\')' % (dirname, suite, test))
+        lines.append('')
+        lines.append('# read inputs')
+#        lines.append('gth  <- read.table("%s/%s_%s_gth.csv", header = FALSE, sep = ",")' % (dirname, suite, test))
+#        lines.append('ou44 <- read.table("%s/%s_%s_ou44.csv", header = FALSE, sep = ",")' % (dirname, suite, test))
+        lines.append('gth  <- scan("%s/%s_%s_gth.csv")' % (dirname, suite, test))
+        lines.append('ou44 <- scan("%s/%s_%s_ou44.csv")' % (dirname, suite, test))
+        lines.append('print(gth)')
+        lines.append('# desinty calculations')
+        lines.append('dens_gth  <- density(gth)')
+        lines.append('dens_ou44 <- density(ou44)')
+        lines.append('')
+        lines.append('# calculate ranges')
+        lines.append('xlim <- range(dens_gth$x,dens_ou44$x)')
+        lines.append('ylim <- range(0,dens_gth$y, dens_ou44$y)')
+        lines.append('')
+        lines.append('# colors')
+        lines.append('col_gth  <- rgb(1,0,0,0.2)')
+        lines.append('col_ou44 <- rgb(0,0,1,0.2)')
+        lines.append('')
+        lines.append('# perform plotting')
+        lines.append('plot(dens_gth, xlim = xlim, ylim = ylim, xlab = \'Time/[s]\', main = \'Distribution of %s - %s\',  panel.first = grid())' % (suite, test))
+        lines.append('polygon(dens_gth , density = -1, col = col_gth)')
+        lines.append('polygon(dens_ou44, density = -1, col = col_ou44)')
+        lines.append('legend(\'topleft\',c(\'GTH\',\'OU44\'), fill = c(col_gth, col_ou44), bty = \'n\', border = NA)')
+        lines.append('')
+        lines.append('dev.off()')
+        filename = '%s/%s_%s.r' % (dirname, suite, test)
+        with open(filename, 'w') as fo:
+            fo.writelines(map(lambda line: '%s\n' % line, lines))
+        system('chmod u+x %s' % filename)
+        
+        # execute r file
+        system('./%s' % filename)
+

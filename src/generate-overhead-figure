@@ -8,6 +8,13 @@ figs = []
 colcount = 4
 figscale = 0.2
 
+anonymizer = {
+#    'GTH':  'GTH',
+#    'OU44': 'OU44',
+    'GTH':  'B1',
+    'OU44': 'B2',
+}
+
 
 def system (command):
     p = Popen(command, shell=True, stdout=PIPE, close_fds=True)
@@ -38,24 +45,34 @@ for suite in data:
         lines.append('# read inputs')
         lines.append('gth  <- scan("%s/%s_%s_gth.csv")' % (dirname, suite, test))
         lines.append('ou44 <- scan("%s/%s_%s_ou44.csv")' % (dirname, suite, test))
-        lines.append('print(gth)')
+        lines.append('')
+        lines.append('# generate 98% percentile')
+        lines.append('gth_percentile  = gth[gth < quantile(gth, 0.98)]')
+        lines.append('ou44_percentile = ou44[ou44 < quantile(ou44, 0.98)]')
+        lines.append('')
         lines.append('# desinty calculations')
         lines.append('dens_gth  <- density(gth)')
         lines.append('dens_ou44 <- density(ou44)')
         lines.append('')
         lines.append('# calculate ranges')
-        lines.append('xlim <- range(dens_gth$x,dens_ou44$x)')
+        lines.append('xmax <- max(dens_gth$x,dens_ou44$x)')
+        lines.append('xlim <- range(gth_percentile,ou44_percentile)')
         lines.append('ylim <- range(0,dens_gth$y, dens_ou44$y)')
+        lines.append('')
+        lines.append('# plot title')
+        lines.append('title = sprintf(\'Distribution of %s - %s\\nshowing 98%%%% percentile, long tail ends at %%6.3fms\', xmax*1000)' % (suite, test))
+#        lines.append('title = \'Distribution of %s - %s\'')
+        lines.append('print(title)')
         lines.append('')
         lines.append('# colors')
         lines.append('col_gth  <- rgb(1,0,0,0.2)')
         lines.append('col_ou44 <- rgb(0,0,1,0.2)')
         lines.append('')
         lines.append('# perform plotting')
-        lines.append('plot(dens_gth, xlim = xlim, ylim = ylim, xlab = \'Time/[s]\', main = \'Distribution of %s - %s\',  panel.first = grid())' % (suite, test))
+        lines.append('plot(dens_gth, xlim = xlim, ylim = ylim, xlab = \'Time/[s]\', main = title,  panel.first = grid())')
         lines.append('polygon(dens_gth , density = -1, col = col_gth)')
         lines.append('polygon(dens_ou44, density = -1, col = col_ou44)')
-        lines.append('legend(\'topright\',c(\'GTH\',\'OU44\'), fill = c(col_gth, col_ou44), bty = \'n\', border = NA)')
+        lines.append('legend(\'topright\',c(\'%s\',\'%s\'), fill = c(col_gth, col_ou44), bty = \'n\', border = NA)' % (anonymizer['GTH'], anonymizer['OU44']))
         lines.append('')
         lines.append('dev.off()')
         filename = '%s/%s_%s.r' % (dirname, suite, test)

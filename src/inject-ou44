@@ -222,6 +222,8 @@ rp_map = {
     'v': hasPropertyRoompredictionV,
 }
 
+relation_count['roomprediction.common'] = len(g)
+
 # attach room properties
 q = '''
 SELECT ?room
@@ -246,6 +248,8 @@ for row in rooms:
         g.add( (data, BDSMAP.key , create_dummy_value()) )
         g.add( (data, BDSMAP.hasArchiver , archiver) )
 
+relation_count['roomprediction.rooms'] = len(g)
+
 # attach temperature sensor streams
 q = '''
 SELECT ?temp
@@ -266,6 +270,8 @@ for row in temps:
     g.add( (data, BDSMAP.key , create_dummy_value()) )
     g.add( (data, BDSMAP.hasArchiver , archiver) )
     
+
+relation_count['roomprediction.temp'] = len(g)
 
 # attach co2 sensor streams
 q = '''
@@ -299,6 +305,10 @@ lines.append('inital: %u' % relation_count['initial'])
 lines.append('generic: %u' % (relation_count['generic']-relation_count['initial']))
 lines.append('lighting: %u' % (relation_count['lighting']-relation_count['generic']))
 lines.append('roomprediction: %u' % (relation_count['roomprediction']-relation_count['lighting']))
+lines.append('roomprediction.common: %u' % (relation_count['roomprediction.common']-relation_count['lighting']))
+lines.append('roomprediction.rooms: %u (count: %u)' % (relation_count['roomprediction.rooms']-relation_count['roomprediction.common'], len(rooms)))
+lines.append('roomprediction.temp: %u (count: %u)' % (relation_count['roomprediction.temp']-relation_count['roomprediction.rooms'], len(temps)))
+lines.append('roomprediction.co2: %u (count: %u)' % (relation_count['roomprediction']-relation_count['roomprediction.temp'], len(co2s)))
 with open(cfilename, 'w') as fo:
     fo.writelines(''.join(map(lambda line: '%s\n' % line, lines)))
 

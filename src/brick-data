@@ -77,7 +77,7 @@ has_static_data = BDS['hasData']
 g.add( (has_static_data, RDFS.subClassOf, has_data) )
 
 value = BDS['value']
-g.add( (value, RDF['type'], OWL['ObjectProperty']) )
+g.add( (value, RDF['type'], OWL['Class']) )
 
 ######################################################### modeling approach ####
 

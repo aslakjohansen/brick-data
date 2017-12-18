@@ -13,14 +13,14 @@ application_max = 10
 points_per_application_site = 5
 application_sites_per_buildings = 20
 points_per_building = points_per_application_site * application_sites_per_buildings
-cost_realization = 0
-cost_production  = 0
+cost_realization            = 24*60*60
+cost_production(pointcount) = 10*60*pointcount
 cost_hardcoded(applications, buildings) = cost_realization \
-                                        + cost_production \
+                                        + cost_production(buildings*points_per_building) \
                                         + 0 \
                                         + applications*buildings*points_per_building*60
 cost_bricked(applications, buildings)   = cost_realization \
-                                        + cost_production \
+                                        + cost_production(buildings*points_per_building) \
                                         + 0 \
                                         + applications*points_per_application_site*60 \
                                         + buildings*points_per_building*60
@@ -38,7 +38,7 @@ unset table
 
 # create contour datafile
 set contour base
-set cntrparam level incremental 0, 1.0, 10
+set cntrparam level incremental 0, 0.1, 10
 unset surface
 set table 'effort_contours.dat'
 splot f(x,y)

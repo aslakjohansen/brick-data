@@ -4,17 +4,25 @@ library(ggplot2)
 library(RColorBrewer)  # for brewer.pal()
 
 # define grid
-x<-seq(1,11,1.0)
-y<-seq(1,11,1.0)
+x<-seq(1,10,1.0)
+y<-seq(1,10,1.0)
 
-xyz.func<-function(x,y) {-10.4+6.53*x+6.53*y-0.167*x^2-0.167*y^2+0.0500*x*y}
+# costs
+cost_brick       <- 60
+cost_hardcoded   <- 0
+cost_application <- 60
+cost_building    <- 60
+cost_combo       <- 60
+
+#xyz.func<-function(x,y) {(cost_brick+cost_building*x+cost_application*y)/(cost_hardcoded+cost_combo*x*y)}
+xyz.func<-function(x,y) {-200+x*100+y*50}
 gg   <- expand.grid(x=x,y=y)
 gg$z <- with(gg,xyz.func(x,y)) # need long format for ggplot
 
 
 brks <- cut(gg$z,breaks=seq(0,100,len=6))
 brks <- gsub(","," - ",brks,fixed=TRUE)
-gg$brks <- gsub("\\(|\\]","",brks)  # reformat guide labels
+#gg$brks <- gsub("\\(|\\]","",brks)  # reformat guide labels
 p <- ggplot(gg,aes(x,y)) +
      geom_tile(aes(fill=brks)) +
      scale_fill_manual("Effort",values=brewer.pal(6,"RdYlGn")) +

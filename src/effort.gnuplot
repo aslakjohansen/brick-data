@@ -51,10 +51,15 @@ set yrange [application_min:application_max]
 set xlabel "Buildings"
 set ylabel "Applications"
 unset key
-set palette rgbformulae 33,13,10
+#set palette rgbformulae 33,13,10
 #set palette defined ( 0 '#000fff',\
 #                      1 '#90ff70',\
 #                      2 '#ee0000')
+set palette defined ( 0 '#ff0000',\
+                      2 '#00ff00')
+#set palette defined ( 0 '#ff0000',\
+#                      1 '#0000ff',\
+#                      2 '#00ff00')
 plot 'effort.dat' with image, \
      'effort_contours.dat' w l lt -1 lw 1.0
 

@@ -5,9 +5,9 @@ set output "effort.pdf"
 
 # view
 building_min =  1
-building_max = 10
+building_max = 8
 application_min =  1
-application_max = 10
+application_max = 8
 
 # formula
 points_per_application_site = 5
@@ -52,6 +52,7 @@ set ylabel  "Applications"
 set cblabel "Effort"
 unset key
 set palette defined ( 0 '#ff0000', \
+                      0.25 '#777777', \
                       2 '#00ff00')
 plot 'effort.dat' with image, \
      'effort_contours.dat' w l lt -1 lw 1.0

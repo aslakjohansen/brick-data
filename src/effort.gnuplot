@@ -1,6 +1,6 @@
 # source: http://www.phyast.pitt.edu/~zov1/gnuplot/html/contour.html
 
-set term pdfcairo font "Times,12-New-Roman"
+set term pdfcairo font "Times-New-Roman,12"
 set output "effort.pdf"
 
 # view

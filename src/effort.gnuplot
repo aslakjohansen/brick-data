@@ -50,7 +50,7 @@ set yrange [application_min:application_max]
 set xlabel "Buildings"
 set ylabel "Applications"
 unset key
-set palette defined ( 0 '#ff0000',\
+set palette defined ( 0 '#ff0000', \
                       2 '#00ff00')
 plot 'effort.dat' with image, \
      'effort_contours.dat' w l lt -1 lw 1.0

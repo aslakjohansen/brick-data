@@ -1,5 +1,6 @@
 TARGETS = \
 	results.json \
+	effort.pdf
 
 
 
@@ -29,4 +30,7 @@ buildings/ou44.ttl: inject-ou44 brick-data.ttl
 
 results.json: execute-test buildings/gth.ttl buildings/ou44.ttl queries/*
 	./execute-test
+
+effort.pdf: effort.gnuplot
+	gnuplot effort.gnuplot
 

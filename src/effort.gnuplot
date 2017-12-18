@@ -47,8 +47,9 @@ unset table
 reset
 set xrange [building_min:building_max]
 set yrange [application_min:application_max]
-set xlabel "Buildings"
-set ylabel "Applications"
+set xlabel  "Buildings"
+set ylabel  "Applications"
+set cblabel "Effort"
 unset key
 set palette defined ( 0 '#ff0000', \
                       2 '#00ff00')

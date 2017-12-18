@@ -56,5 +56,5 @@ set palette rgbformulae 33,13,10
 #                      1 '#90ff70',\
 #                      2 '#ee0000')
 plot 'effort.dat' with image, \
-     'effort_contours.dat' w l lt -1 lw 1.5
+     'effort_contours.dat' w l lt -1 lw 1.0
 

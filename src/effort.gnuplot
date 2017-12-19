@@ -13,6 +13,7 @@ application_max = 8
 points_per_application_site = 5
 application_sites_per_buildings = 20
 points_per_building = points_per_application_site * application_sites_per_buildings
+cost_learning_sparql        = 5*60*60
 cost_realization            = 24*60*60
 cost_production(pointcount) = 10*60*pointcount
 cost_hardcoded(applications, buildings) = cost_realization \
@@ -21,7 +22,7 @@ cost_hardcoded(applications, buildings) = cost_realization \
                                         + applications*buildings*points_per_building*60
 cost_bricked(applications, buildings)   = cost_realization \
                                         + cost_production(buildings*points_per_building) \
-                                        + 0 \
+                                        + cost_learning_sparql \
                                         + applications*points_per_application_site*60 \
                                         + buildings*points_per_building*60
 
@@ -43,6 +44,14 @@ set table 'effort_contours.dat'
 splot f(x,y)
 unset table
 
+# create breakeven contour datafile
+set contour base
+set cntrparam level incremental 1, 1, 1
+unset surface
+set table 'effort_breakeven_contours.dat'
+splot f(x,y)
+unset table
+
 # plot
 reset
 set xrange [building_min:building_max]
@@ -51,9 +60,10 @@ set xlabel  "Buildings"
 set ylabel  "Applications"
 set cblabel "Effort"
 unset key
-set palette defined ( 0 '#ff0000', \
-                      0.25 '#777777', \
-                      2 '#00ff00')
+set palette defined ( 0.00 '#ff0000', \
+                      0.55 '#777777', \
+                      2.00 '#00ff00')
 plot 'effort.dat' with image, \
-     'effort_contours.dat' w l lt -1 lw 1.0
+     'effort_contours.dat' w l lt -1 lw 1.0, \
+     'effort_breakeven_contours.dat' w l lt -1 lw 3.0
 

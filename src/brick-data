@@ -26,6 +26,10 @@ g.bind('owl' , OWL)
 BD = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
 g.bind('bd', BD)
 
+# bosswave data namespace
+BDBW = Namespace('https://brickschema.org/schema/1.0.1/BrickDataBosswave#')
+g.bind('bdbw', BDBW)
+
 # smap data namespace
 BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
 g.bind('bdsmap', BDSMAP)
@@ -41,6 +45,17 @@ g.add( (Data, RDF['type'], OWL['Class']) ) # TODO: should this not be RDFS.subCl
 
 has_data = BD['hasData']
 g.add( (has_data, RDF['type'], OWL['ObjectProperty']) )
+
+############################################################# bosswave data ####
+
+BosswaveData = BDBW['Data']
+g.add( (BosswaveData, RDFS.subClassOf, Data) )
+
+has_bosswave_data = BDBW['hasData']
+g.add( (has_bosswave_data, RDFS.subClassOf, has_data) )
+
+bosswave_path = BDSMAP['path']
+g.add( (bosswave_path, RDF['type'], OWL['ObjectProperty']) )
 
 ################################################################# smap data ####
 

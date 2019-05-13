@@ -30,6 +30,10 @@ g.bind('bd', BD)
 BDBW = Namespace('https://brickschema.org/schema/1.0.1/BrickDataBosswave#')
 g.bind('bdbw', BDBW)
 
+# kafka data namespace
+BDK = Namespace('https://brickschema.org/schema/1.0.1/BrickDataKafka#')
+g.bind('bdk', BDK)
+
 # smap data namespace
 BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
 g.bind('bdsmap', BDSMAP)
@@ -56,6 +60,20 @@ g.add( (has_bosswave_data, RDFS.subClassOf, has_data) )
 
 bosswave_path = BDSMAP['path']
 g.add( (bosswave_path, RDF['type'], OWL['ObjectProperty']) )
+
+############################################################# bosswave data ####
+
+KafkaData = BDK['Data']
+g.add( (KafkaData, RDFS.subClassOf, Data) )
+
+has_kafka_data = BDK['hasData']
+g.add( (has_kafka_data, RDFS.subClassOf, has_data) )
+
+kafka_topic = BDK['topic']
+g.add( (kafka_topic, RDF['type'], OWL['ObjectProperty']) )
+
+kafka_broker = BDK['broker']
+g.add( (kafka_broker, RDF['type'], OWL['ObjectProperty']) )
 
 ################################################################# smap data ####
 

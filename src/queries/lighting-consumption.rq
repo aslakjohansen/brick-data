@@ -1,13 +1,13 @@
 SELECT ?meter ?uuid ?key ?query ?version
 WHERE {
     ?meter rdf:type/rdfs:subClassOf* brick:Power_Meter .
-    ?meter bdsmap:hasData ?point .
-    ?point bdsmap:hasArchiver ?archiver .
+    ?meter bd:hasData ?point .
+    ?point bd:hasArchiver ?archiver .
     
-    ?point bdsmap:uuid ?uuid .
-    ?point bdsmap:key  ?key .
+    ?point bd:uuid ?uuid .
+    ?point bd:key  ?key .
     
-    ?archiver bdsmap:query   ?query .
-    ?archiver bdsmap:version ?version .
+    ?archiver bd:query   ?query .
+    ?archiver bd:version ?version .
 }
 

@@ -1,14 +1,16 @@
 SELECT ?meter ?uuid ?key ?add ?version
 WHERE {
     ?meter rdf:type/rdfs:subClassOf* brick:Power_Meter .
-    ?meter bdpts:hasThreshold ?threshold .
-    ?threshold bdsmap:hasData ?point .
-    ?point bdsmap:hasArchiver ?archiver .
+    ?meter bd:hasProperty ?threshold .
+    ?threshold bd:hasData ?point .
+    ?point bd:hasArchiver ?archiver .
     
-    ?point bdsmap:uuid ?uuid .
-    ?point bdsmap:key  ?key .
+    ?threshold rdf:type bdpts:ThresholdProperty .
     
-    ?archiver bdsmap:add     ?add .
-    ?archiver bdsmap:version ?version .
+    ?point bd:uuid ?uuid .
+    ?point bd:key  ?key .
+    
+    ?archiver bd:add     ?add .
+    ?archiver bd:version ?version .
 }
 

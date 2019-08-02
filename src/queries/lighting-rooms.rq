@@ -6,14 +6,16 @@ WHERE {
     ?meter bf:feeds*/bf:isPointOf ?light .
     ?light (bf:isPartOf|bf:isLocatedIn)+ ?room .
     
-    ?room bdptl:hasPropertyMaxOccupants ?max_occupants .
-    ?max_occupants bdsmap:hasData ?point .
-    ?point bdsmap:hasArchiver ?archiver .
+    ?room bd:hasProperty ?max_occupants .
+    ?max_occupants bd:hasData ?point .
+    ?point bd:hasArchiver ?archiver .
     
-    ?point bdsmap:uuid ?uuid .
-    ?point bdsmap:key  ?key .
+    ?max_occupants rdf:type bdptl:MaxOccupantsProperty .
     
-    ?archiver bdsmap:query   ?query .
-    ?archiver bdsmap:version ?version .
+    ?point bd:uuid ?uuid .
+    ?point bd:key  ?key .
+    
+    ?archiver bd:query   ?query .
+    ?archiver bd:version ?version .
 }
 

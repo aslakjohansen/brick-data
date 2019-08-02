@@ -37,8 +37,6 @@ relation_count['initial'] = len(g)
 # load extension
 g.parse('brick-data.ttl', format='turtle')
 BD     = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
-BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
-BDS    = Namespace('https://brickschema.org/schema/1.0.1/BrickDataStatic#')
 RDF    = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 RDFS   = Namespace('http://www.w3.org/2000/01/rdf-schema#')
 #BDPTS  = Namespace('http://mmmi.sdu.dk/1.0.1/buildings/ou44/bd_pt_s#')
@@ -53,10 +51,10 @@ g.bind('data' , DATA)
 
 # create archiver
 archiver = DATA['archiver']
-g.add( (archiver, RDF.type      , BDSMAP['Archiver']) )
-g.add( (archiver, BDSMAP.add    , create_dummy_value()) )
-g.add( (archiver, BDSMAP.query  , create_dummy_value()) )
-g.add( (archiver, BDSMAP.version, create_dummy_value()) )
+g.add( (archiver, RDF.type  , BD['SmapArchiver']) )
+g.add( (archiver, BD.add    , create_dummy_value()) )
+g.add( (archiver, BD.query  , create_dummy_value()) )
+g.add( (archiver, BD.version, create_dummy_value()) )
 
 relation_count['generic'] = len(g)
 
@@ -67,15 +65,17 @@ g.bind('bdptl', BDPTL)
 
 # create lighting modeling approach
 LightingApproach = BDPTL['Approach']
-g.add( (LightingApproach, RDF.type, BD['Approach']) )
+g.add( (LightingApproach, RDF.type, BD['Group']) )
 LightingThresholdProperty = BDPTL['ThresholdProperty']
 g.add( (LightingThresholdProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyLightingThreshold = BDPTL['hasPropertyThreshold']
-g.add( (hasPropertyLightingThreshold, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (LightingApproach, BD.contains, LightingThresholdProperty) )
+#hasPropertyLightingThreshold = BDPTL['hasPropertyThreshold']
+#g.add( (hasPropertyLightingThreshold, RDFS.subClassOf, BD['hasProperty']) )
 LightingMaxOccupantsProperty = BDPTL['MaxOccupantsProperty']
 g.add( (LightingMaxOccupantsProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyLightingMaxOccupants = BDPTL['hasPropertyMaxOccupants']
-g.add( (hasPropertyLightingMaxOccupants, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (LightingApproach, BD.contains, LightingMaxOccupantsProperty) )
+#hasPropertyLightingMaxOccupants = BDPTL['hasPropertyMaxOccupants']
+#g.add( (hasPropertyLightingMaxOccupants, RDFS.subClassOf, BD['hasProperty']) )
 
 # attach metering properties and streams
 q = '''
@@ -91,22 +91,24 @@ for row in meters:
     # attach data stream
     data = DATA['meter/data%d' % counter]
     counter += 1
-    g.add( (data, RDF.type      , BDSMAP['Data']) )
-    g.add( (meter, BDSMAP.hasData, data) )
-    g.add( (data, BDSMAP.uuid, create_dummy_value()) )
-    g.add( (data, BDSMAP.key , create_dummy_value()) )
-    g.add( (data, BDSMAP.hasArchiver , archiver) )
+    g.add( (data, RDF.type       , BD['SmapData']) )
+    g.add( (meter, BD.hasData, data) )
+    g.add( (data, BD.uuid        , create_dummy_value()) )
+    g.add( (data, BD.key         , create_dummy_value()) )
+    g.add( (data, BD.hasArchiver , archiver) )
     
     # attach threshold property
     threshold_data = DATA['meter/threshold/data%d' % counter]
     counter += 1
+    g.add( (threshold_data, RDF.type, BD['SmapData']) )
     threshold_prop = DATA['meter/threshold/property%d' % counter]
     counter += 1
-    g.add( (meter, hasPropertyLightingThreshold, threshold_prop) )
-    g.add( (threshold_prop, BDSMAP.hasData, threshold_data) )
-    g.add( (threshold_data, BDSMAP.uuid, create_dummy_value()) )
-    g.add( (threshold_data, BDSMAP.key , create_dummy_value()) )
-    g.add( (threshold_data, BDSMAP.hasArchiver , archiver) )
+    g.add( (threshold_prop, RDF.type, LightingMaxOccupantsProperty) )
+    g.add( (meter, BD.hasProperty, threshold_prop) )
+    g.add( (threshold_prop, BD.hasData     , threshold_data) )
+    g.add( (threshold_data, BD.uuid        , create_dummy_value()) )
+    g.add( (threshold_data, BD.key         , create_dummy_value()) )
+    g.add( (threshold_data, BD.hasArchiver , archiver) )
 
 # attach room properties
 q = '''
@@ -122,13 +124,15 @@ for row in rooms:
     # attach maxOccupant property
     maxocc_data = DATA['room/maxocc/data%d' % counter]
     counter += 1
+    g.add( (maxocc_data, RDF.type, BD['SmapData']) )
     maxocc_prop = DATA['room/maxocc/property%d' % counter]
     counter += 1
-    g.add( (room, hasPropertyLightingMaxOccupants, maxocc_prop) )
-    g.add( (maxocc_prop, BDSMAP.hasData, maxocc_data) )
-    g.add( (maxocc_data, BDSMAP.uuid, create_dummy_value()) )
-    g.add( (maxocc_data, BDSMAP.key , create_dummy_value()) )
-    g.add( (maxocc_data, BDSMAP.hasArchiver , archiver) )
+    g.add( (maxocc_prop, RDF.type, LightingThresholdProperty) )
+    g.add( (room, BD.hasProperty, maxocc_prop) )
+    g.add( (maxocc_prop, BD.hasData, maxocc_data) )
+    g.add( (maxocc_data, BD.uuid        , create_dummy_value()) )
+    g.add( (maxocc_data, BD.key         , create_dummy_value()) )
+    g.add( (maxocc_data, BD.hasArchiver , archiver) )
 
 relation_count['lighting'] = len(g)
 
@@ -139,87 +143,100 @@ g.bind('bdrp' , BDRP)
 
 # create room prediction approach
 RoompredictionApproach = BDRP['Approach']
-g.add( (RoompredictionApproach, RDF.type, BD['Approach']) )
+g.add( (RoompredictionApproach, RDF.type, BD['Group']) )
 
 EwaProperty = BDRP['EwaProperty']
 g.add( (EwaProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionEwa = BDRP['hasPropertyEwa']
-g.add( (hasPropertyRoompredictionEwa, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, EwaProperty) )
+#hasPropertyRoompredictionEwa = BDRP['hasPropertyEwa']
+#g.add( (hasPropertyRoompredictionEwa, RDFS.subClassOf, BD['hasProperty']) )
 
 IlewtcProperty = BDRP['IlewtcProperty']
 g.add( (IlewtcProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionIlewtc = BDRP['hasPropertyIlewtc']
-g.add( (hasPropertyRoompredictionIlewtc, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, IlewtcProperty) )
+#hasPropertyRoompredictionIlewtc = BDRP['hasPropertyIlewtc']
+#g.add( (hasPropertyRoompredictionIlewtc, RDFS.subClassOf, BD['hasProperty']) )
 
 OlewtcProperty = BDRP['OlewtcProperty']
 g.add( (OlewtcProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionOlewtc = BDRP['hasPropertyOlewtc']
-g.add( (hasPropertyRoompredictionOlewtc, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, OlewtcProperty) )
+#hasPropertyRoompredictionOlewtc = BDRP['hasPropertyOlewtc']
+#g.add( (hasPropertyRoompredictionOlewtc, RDFS.subClassOf, BD['hasProperty']) )
 
 CO2Property = BDRP['CO2Property']
 g.add( (CO2Property, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionCO2 = BDRP['hasPropertyCO2']
-g.add( (hasPropertyRoompredictionCO2, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, CO2Property) )
+#hasPropertyRoompredictionCO2 = BDRP['hasPropertyCO2']
+#g.add( (hasPropertyRoompredictionCO2, RDFS.subClassOf, BD['hasProperty']) )
 
 PcfProperty = BDRP['PcfProperty']
 g.add( (PcfProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionPcf = BDRP['hasPropertyPcf']
-g.add( (hasPropertyRoompredictionPcf, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, PcfProperty) )
+#hasPropertyRoompredictionPcf = BDRP['hasPropertyPcf']
+#g.add( (hasPropertyRoompredictionPcf, RDFS.subClassOf, BD['hasProperty']) )
 
 FpProperty = BDRP['FpProperty']
 g.add( (FpProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionFp = BDRP['hasPropertyFp']
-g.add( (hasPropertyRoompredictionFp, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, FpProperty) )
+#hasPropertyRoompredictionFp = BDRP['hasPropertyFp']
+#g.add( (hasPropertyRoompredictionFp, RDFS.subClassOf, BD['hasProperty']) )
 
 OlewtrProperty = BDRP['OlewtrProperty']
 g.add( (OlewtrProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionOlewtr = BDRP['hasPropertyOlewtr']
-g.add( (hasPropertyRoompredictionOlewtr, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, OlewtrProperty) )
+#hasPropertyRoompredictionOlewtr = BDRP['hasPropertyOlewtr']
+#g.add( (hasPropertyRoompredictionOlewtr, RDFS.subClassOf, BD['hasProperty']) )
 
 MlewtrProperty = BDRP['MlewtrProperty']
 g.add( (MlewtrProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionMlewtr = BDRP['hasPropertyMlewtr']
-g.add( (hasPropertyRoompredictionMlewtr, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, MlewtrProperty) )
+#hasPropertyRoompredictionMlewtr = BDRP['hasPropertyMlewtr']
+#g.add( (hasPropertyRoompredictionMlewtr, RDFS.subClassOf, BD['hasProperty']) )
 
 ShProperty = BDRP['ShProperty']
 g.add( (ShProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionSh = BDRP['hasPropertySh']
-g.add( (hasPropertyRoompredictionSh, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, ShProperty) )
+#hasPropertyRoompredictionSh = BDRP['hasPropertySh']
+#g.add( (hasPropertyRoompredictionSh, RDFS.subClassOf, BD['hasProperty']) )
 
 TProperty = BDRP['TProperty']
 g.add( (TProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionT = BDRP['hasPropertyT']
-g.add( (hasPropertyRoompredictionT, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, TProperty) )
+#hasPropertyRoompredictionT = BDRP['hasPropertyT']
+#g.add( (hasPropertyRoompredictionT, RDFS.subClassOf, BD['hasProperty']) )
 
 CProperty = BDRP['CProperty']
 g.add( (CProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionC = BDRP['hasPropertyC']
-g.add( (hasPropertyRoompredictionC, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, CProperty) )
+#hasPropertyRoompredictionC = BDRP['hasPropertyC']
+#g.add( (hasPropertyRoompredictionC, RDFS.subClassOf, BD['hasProperty']) )
 
 IrProperty = BDRP['IrProperty']
 g.add( (IrProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionIr = BDRP['hasPropertyIr']
-g.add( (hasPropertyRoompredictionIr, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, IrProperty) )
+#hasPropertyRoompredictionIr = BDRP['hasPropertyIr']
+#g.add( (hasPropertyRoompredictionIr, RDFS.subClassOf, BD['hasProperty']) )
 
 VProperty = BDRP['VProperty']
 g.add( (VProperty, RDFS.subClassOf, BD['Property']) )
-hasPropertyRoompredictionV = BDRP['hasPropertyV']
-g.add( (hasPropertyRoompredictionV, RDFS.subClassOf, BD['hasProperty']) )
+g.add( (RoompredictionApproach, BD.contains, VProperty) )
+#hasPropertyRoompredictionV = BDRP['hasPropertyV']
+#g.add( (hasPropertyRoompredictionV, RDFS.subClassOf, BD['hasProperty']) )
 
 rp_map = {
-    'ewa': hasPropertyRoompredictionEwa,
-    'ilewtc': hasPropertyRoompredictionIlewtc,
-    'olewtc': hasPropertyRoompredictionOlewtc,
-    'co2': hasPropertyRoompredictionCO2,
-    'pcf': hasPropertyRoompredictionPcf,
-    'fp': hasPropertyRoompredictionFp,
-    'olewtr': hasPropertyRoompredictionOlewtr,
-    'mlewtr': hasPropertyRoompredictionMlewtr,
-    'sh': hasPropertyRoompredictionSh,
-    't': hasPropertyRoompredictionT,
-    'c': hasPropertyRoompredictionC,
-    'ir': hasPropertyRoompredictionIr,
-    'v': hasPropertyRoompredictionV,
+    'ewa':    EwaProperty,
+    'ilewtc': IlewtcProperty,
+    'olewtc': OlewtcProperty,
+    'co2':    CO2Property,
+    'pcf':    PcfProperty,
+    'fp':     FpProperty,
+    'olewtr': OlewtrProperty,
+    'mlewtr': MlewtrProperty,
+    'sh':     ShProperty,
+    't':      TProperty,
+    'c':      CProperty,
+    'ir':     IrProperty,
+    'v':      VProperty,
 }
 
 relation_count['roomprediction.common'] = len(g)
@@ -237,16 +254,18 @@ for row in rooms:
     
     # attach bdrp:*
     for key in rp_map:
-        relation = rp_map[key]
+        prop_class = rp_map[key]
         data = DATA['room/%s/data%d' % (key, counter)]
+        g.add( (data, RDF.type, BD['SmapData']) )
         counter += 1
         prop = DATA['room/%s/property%d' % (key, counter)]
+        g.add( (prop, RDF.type, prop_class) )
         counter += 1
-        g.add( (room, relation, prop) )
-        g.add( (prop, BDSMAP.hasData, data) )
-        g.add( (data, BDSMAP.uuid, create_dummy_value()) )
-        g.add( (data, BDSMAP.key , create_dummy_value()) )
-        g.add( (data, BDSMAP.hasArchiver , archiver) )
+        g.add( (room, BD.hasProperty, prop) )
+        g.add( (prop, BD.hasData, data) )
+        g.add( (data, BD.uuid        , create_dummy_value()) )
+        g.add( (data, BD.key         , create_dummy_value()) )
+        g.add( (data, BD.hasArchiver , archiver) )
 
 relation_count['roomprediction.rooms'] = len(g)
 
@@ -264,11 +283,11 @@ for row in temps:
     # attach data stream
     data = DATA['temp/data%d' % counter]
     counter += 1
-    g.add( (data, RDF.type      , BDSMAP['Data']) )
-    g.add( (temp, BDSMAP.hasData, data) )
-    g.add( (data, BDSMAP.uuid, create_dummy_value()) )
-    g.add( (data, BDSMAP.key , create_dummy_value()) )
-    g.add( (data, BDSMAP.hasArchiver , archiver) )
+    g.add( (data, RDF.type      , BD['SmapData']) )
+    g.add( (temp, BD.hasData, data) )
+    g.add( (data, BD.uuid, create_dummy_value()) )
+    g.add( (data, BD.key , create_dummy_value()) )
+    g.add( (data, BD.hasArchiver , archiver) )
     
 
 relation_count['roomprediction.temp'] = len(g)
@@ -287,11 +306,11 @@ for row in co2s:
     # attach data stream
     data = DATA['temp/data%d' % counter]
     counter += 1
-    g.add( (data, RDF.type      , BDSMAP['Data']) )
-    g.add( (co2, BDSMAP.hasData, data) )
-    g.add( (data, BDSMAP.uuid, create_dummy_value()) )
-    g.add( (data, BDSMAP.key , create_dummy_value()) )
-    g.add( (data, BDSMAP.hasArchiver , archiver) )
+    g.add( (data, RDF.type      , BD['SmapData']) )
+    g.add( (co2, BD.hasData, data) )
+    g.add( (data, BD.uuid        , create_dummy_value()) )
+    g.add( (data, BD.key         , create_dummy_value()) )
+    g.add( (data, BD.hasArchiver , archiver) )
 
 relation_count['roomprediction'] = len(g)
 

@@ -26,102 +26,84 @@ g.bind('owl' , OWL)
 BD = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
 g.bind('bd', BD)
 
-# bosswave data namespace
-BDBW = Namespace('https://brickschema.org/schema/1.0.1/BrickDataBosswave#')
-g.bind('bdbw', BDBW)
-
-# kafka data namespace
-BDK = Namespace('https://brickschema.org/schema/1.0.1/BrickDataKafka#')
-g.bind('bdk', BDK)
-
-# smap data namespace
-BDSMAP = Namespace('https://brickschema.org/schema/1.0.1/BrickDataSmap#')
-g.bind('bdsmap', BDSMAP)
-
-# static data namespace
-BDS = Namespace('https://brickschema.org/schema/1.0.1/BrickDataStatic#')
-g.bind('bds', BDS)
-
 ###################################################################### data ####
 
 Data = BD['Data']
-g.add( (Data, RDF['type'], OWL['Class']) ) # TODO: should this not be RDFS.subClassOf?
+g.add( (Data, RDFS['subClassOf'], OWL['Class']) )
 
-has_data = BD['hasData']
-g.add( (has_data, RDF['type'], OWL['ObjectProperty']) )
+hasData = BD['hasData']
+g.add( (hasData, RDFS['subPropertyOf'], OWL['ObjectProperty']) )
+
+################################################################## property ####
+
+Property = BD['Property']
+g.add( (Property, RDFS['subClassOf'], OWL['Class']) )
+
+hasProperty = BD['hasProperty']
+g.add( (hasProperty, RDFS['subPropertyOf'], OWL['ObjectProperty']) )
+
+################################################################## archiver ####
+
+Archiver = BD['Archiver']
+g.add( (Archiver, RDF['type'], OWL['Class']) )
 
 ############################################################# bosswave data ####
 
-BosswaveData = BDBW['Data']
+BosswaveData = BD['BosswaveData']
 g.add( (BosswaveData, RDFS.subClassOf, Data) )
 
-has_bosswave_data = BDBW['hasData']
-g.add( (has_bosswave_data, RDFS.subClassOf, has_data) )
-
-bosswave_path = BDSMAP['path']
-g.add( (bosswave_path, RDF['type'], OWL['ObjectProperty']) )
+path = BD['path']
+g.add( (path, RDF['type'], OWL['ObjectProperty']) )
 
 ############################################################# bosswave data ####
 
-KafkaData = BDK['Data']
+KafkaData = BD['KafkaData']
 g.add( (KafkaData, RDFS.subClassOf, Data) )
 
-has_kafka_data = BDK['hasData']
-g.add( (has_kafka_data, RDFS.subClassOf, has_data) )
+topic = BD['topic']
+g.add( (topic, RDF['type'], OWL['ObjectProperty']) )
 
-kafka_topic = BDK['topic']
-g.add( (kafka_topic, RDF['type'], OWL['ObjectProperty']) )
-
-kafka_broker = BDK['broker']
-g.add( (kafka_broker, RDF['type'], OWL['ObjectProperty']) )
+broker = BD['broker']
+g.add( (broker, RDF['type'], OWL['ObjectProperty']) )
 
 ################################################################# smap data ####
 
-SmapData = BDSMAP['Data']
+SmapData = BD['SmapData']
 g.add( (SmapData, RDFS.subClassOf, Data) )
 
-has_smap_data = BDSMAP['hasData']
-g.add( (has_smap_data, RDFS.subClassOf, has_data) )
+SmapArchiver = BD['SmapArchiver']
+g.add( (SmapArchiver, RDFS.subClassOf, Archiver) )
 
-Archiver = BDSMAP['Archiver']
-g.add( (Archiver, RDF['type'], OWL['Class']) )
-
-archivedAt = BDSMAP['archivedAt']
+archivedAt = BD['archivedAt']
 g.add( (archivedAt, RDF['type'], OWL['ObjectProperty']) )
 
-add_path = BDSMAP['add']
-g.add( (add_path, RDF['type'], OWL['ObjectProperty']) )
+add = BD['add']
+g.add( (add, RDF['type'], OWL['DataProperty']) )
 
-query_path = BDSMAP['query']
-g.add( (query_path, RDF['type'], OWL['ObjectProperty']) )
+query = BD['query']
+g.add( (query, RDF['type'], OWL['DataProperty']) )
 
-uuid = BDSMAP['uuid']
-g.add( (uuid, RDF['type'], OWL['ObjectProperty']) )
+uuid = BD['uuid']
+g.add( (uuid, RDF['type'], OWL['DataProperty']) )
 
-key = BDSMAP['key']
-g.add( (key, RDF['type'], OWL['ObjectProperty']) )
+key = BD['key']
+g.add( (key, RDF['type'], OWL['DataProperty']) )
 
 ############################################################### static data ####
 
-StaticData = BDS['Data']
+StaticData = BD['StaticData']
 g.add( (StaticData, RDFS.subClassOf, Data) )
 
-has_static_data = BDS['hasData']
-g.add( (has_static_data, RDFS.subClassOf, has_data) )
-
-value = BDS['value']
-g.add( (value, RDF['type'], OWL['ObjectProperty']) )
+value = BD['value']
+g.add( (value, RDF['type'], OWL['DataProperty']) )
 
 ######################################################### modeling approach ####
 
-ModelApproach = BD['Model_Approach']
-g.add( (ModelApproach, RDF['type'], OWL['Class']) )
+Group = BD['Group']
+g.add( (Group, RDF['type'], OWL['Class']) )
 
-Property = BD['Property']
-g.add( (Property, RDF['type'], OWL['Class']) )
-
-hasProperty = BD['hasProperty']
-g.add( (hasProperty, RDF['type'], OWL['ObjectProperty']) )
+contains = BD['contains']
+g.add( (contains, RDF['type'], OWL['ObjectProperty']) )
 
 ############################################################## store result ####
 

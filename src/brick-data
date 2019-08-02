@@ -18,9 +18,11 @@ g = Graph()
 RDF  = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 RDFS = Namespace('http://www.w3.org/2000/01/rdf-schema#')
 OWL  = Namespace('http://www.w3.org/2002/07/owl#')
+XSD  = Namespace('http://www.w3.org/2001/XMLSchema#')
 g.bind('rdf' , RDF)
 g.bind('rdfs', RDFS)
 g.bind('owl' , OWL)
+g.bind('xsd' , XSD)
 
 # brick-data namespace
 BD = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
@@ -33,6 +35,8 @@ g.add( (Data, RDFS['subClassOf'], OWL['Class']) )
 
 hasData = BD['hasData']
 g.add( (hasData, RDFS['subPropertyOf'], OWL['ObjectProperty']) )
+g.add( (hasData, RDFS['domain'], OWL['Class']) )
+g.add( (hasData, RDFS['range'] , Data) )
 
 ################################################################## property ####
 
@@ -41,6 +45,8 @@ g.add( (Property, RDFS['subClassOf'], OWL['Class']) )
 
 hasProperty = BD['hasProperty']
 g.add( (hasProperty, RDFS['subPropertyOf'], OWL['ObjectProperty']) )
+g.add( (hasProperty, RDFS['domain'], OWL['Class']) )
+g.add( (hasProperty, RDFS['range'] , Property) )
 
 ################################################################## archiver ####
 
@@ -54,6 +60,8 @@ g.add( (BosswaveData, RDFS.subClassOf, Data) )
 
 path = BD['path']
 g.add( (path, RDF['type'], OWL['ObjectProperty']) )
+g.add( (path, RDFS['domain'], BosswaveData) )
+g.add( (path, RDFS['range'] , XSD['string']) )
 
 ############################################################# bosswave data ####
 
@@ -62,9 +70,13 @@ g.add( (KafkaData, RDFS.subClassOf, Data) )
 
 topic = BD['topic']
 g.add( (topic, RDF['type'], OWL['ObjectProperty']) )
+g.add( (topic, RDFS['domain'], KafkaData) )
+g.add( (topic, RDFS['range'] , XSD['string']) )
 
 broker = BD['broker']
 g.add( (broker, RDF['type'], OWL['ObjectProperty']) )
+g.add( (broker, RDFS['domain'], KafkaData) )
+g.add( (broker, RDFS['range'] , XSD['url']) )
 
 ################################################################# smap data ####
 
@@ -76,18 +88,28 @@ g.add( (SmapArchiver, RDFS.subClassOf, Archiver) )
 
 archivedAt = BD['archivedAt']
 g.add( (archivedAt, RDF['type'], OWL['ObjectProperty']) )
+g.add( (archivedAt, RDFS['domain'], SmapData) )
+g.add( (archivedAt, RDFS['range'] , SmapArchiver) )
 
 add = BD['add']
 g.add( (add, RDF['type'], OWL['DataProperty']) )
+g.add( (add, RDFS['domain'], SmapData) )
+g.add( (add, RDFS['range'] , XSD['url']) )
 
 query = BD['query']
 g.add( (query, RDF['type'], OWL['DataProperty']) )
+g.add( (query, RDFS['domain'], SmapData) )
+g.add( (query, RDFS['range'] , XSD['url']) )
 
 uuid = BD['uuid']
 g.add( (uuid, RDF['type'], OWL['DataProperty']) )
+g.add( (uuid, RDFS['domain'], SmapData) )
+g.add( (uuid, RDFS['range'] , XSD['string']) )
 
 key = BD['key']
 g.add( (key, RDF['type'], OWL['DataProperty']) )
+g.add( (key, RDFS['domain'], SmapData) )
+g.add( (key, RDFS['range'] , XSD['string']) )
 
 ############################################################### static data ####
 
@@ -96,6 +118,8 @@ g.add( (StaticData, RDFS.subClassOf, Data) )
 
 value = BD['value']
 g.add( (value, RDF['type'], OWL['DataProperty']) )
+g.add( (value, RDFS['domain'], StaticData) )
+g.add( (value, RDFS['range'] , XSD['string']) )
 
 ######################################################### modeling approach ####
 
@@ -104,6 +128,8 @@ g.add( (Group, RDF['type'], OWL['Class']) )
 
 contains = BD['contains']
 g.add( (contains, RDF['type'], OWL['ObjectProperty']) )
+g.add( (contains, RDFS['domain'], Group) )
+g.add( (contains, RDFS['range'] , Property) )
 
 ############################################################## store result ####
 

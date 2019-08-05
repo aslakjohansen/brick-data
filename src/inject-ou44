@@ -39,10 +39,10 @@ g.parse('brick-data.ttl', format='turtle')
 BD     = Namespace('https://brickschema.org/schema/1.0.1/BrickData#')
 RDF    = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 RDFS   = Namespace('http://www.w3.org/2000/01/rdf-schema#')
-#BDPTS  = Namespace('http://mmmi.sdu.dk/1.0.1/buildings/ou44/bd_pt_s#')
-#g.bind('rdf'  , RDF)
-#g.bind('rdfs' , RDFS)
-#g.bind('bdpts', BDPTS)
+BDPTS  = Namespace('http://mmmi.sdu.dk/1.0.1/buildings/ou44/bd_pt_s#')
+g.bind('rdf'  , RDF)
+g.bind('rdfs' , RDFS)
+g.bind('bdpts', BDPTS)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ generic
 

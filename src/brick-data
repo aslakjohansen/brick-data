@@ -78,7 +78,7 @@ g.add( (broker, RDF['type'], OWL['ObjectProperty']) )
 g.add( (broker, RDFS['domain'], KafkaData) )
 g.add( (broker, RDFS['range'] , XSD['url']) )
 
-################################################################ kafka data ####
+################################################################# mqtt data ####
 
 MqttData = BD['MqttData']
 g.add( (MqttData, RDFS.subClassOf, Data) )

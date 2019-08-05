@@ -78,6 +78,15 @@ g.add( (broker, RDF['type'], OWL['ObjectProperty']) )
 g.add( (broker, RDFS['domain'], KafkaData) )
 g.add( (broker, RDFS['range'] , XSD['url']) )
 
+################################################################ kafka data ####
+
+MqttData = BD['MqttData']
+g.add( (MqttData, RDFS.subClassOf, Data) )
+
+g.add( (topic, RDFS['domain'], MqttData) )
+
+g.add( (broker, RDFS['domain'], MqttData) )
+
 ################################################################# smap data ####
 
 SmapData = BD['SmapData']

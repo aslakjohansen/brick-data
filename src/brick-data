@@ -130,6 +130,21 @@ g.add( (value, RDF['type'], OWL['DataProperty']) )
 g.add( (value, RDFS['domain'], StaticData) )
 g.add( (value, RDFS['range'] , XSD['string']) )
 
+################################################################## csv data ####
+
+CsvData = BD['CsvData']
+g.add( (CsvData, RDFS.subClassOf, Data) )
+
+column = BD['column']
+g.add( (column, RDF['type'], OWL['ObjectProperty']) )
+g.add( (column, RDFS['domain'], CsvData) )
+g.add( (column, RDFS['range'] , XSD['integer']) )
+
+url = BD['broker']
+g.add( (url, RDF['type'], OWL['ObjectProperty']) )
+g.add( (url, RDFS['domain'], CsvData) )
+g.add( (url, RDFS['range'] , XSD['url']) )
+
 ######################################################### modeling approach ####
 
 Group = BD['Group']

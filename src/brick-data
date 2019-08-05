@@ -63,7 +63,7 @@ g.add( (path, RDF['type'], OWL['ObjectProperty']) )
 g.add( (path, RDFS['domain'], BosswaveData) )
 g.add( (path, RDFS['range'] , XSD['string']) )
 
-############################################################# bosswave data ####
+################################################################ kafka data ####
 
 KafkaData = BD['KafkaData']
 g.add( (KafkaData, RDFS.subClassOf, Data) )

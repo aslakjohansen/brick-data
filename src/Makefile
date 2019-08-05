@@ -1,6 +1,7 @@
 TARGETS = \
+	brick-data.ttl \
 	results.json \
-	effort.pdf
+	effort.pdf \
 
 
 
